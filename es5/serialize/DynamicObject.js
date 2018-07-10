@@ -1,5 +1,3 @@
-'use strict';
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -200,12 +198,8 @@ var DynamicObject = function (_GameObject) {
     }
 
     // convenience getters
-
-
     _createClass(DynamicObject, [{
         key: 'toString',
-
-
         /**
          * Formatted textual description of the dynamic object.
          * The output of this method is used to describe each instance in the traces,
