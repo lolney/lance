@@ -126,8 +126,17 @@ class ClientEngine {
                 this.networkMonitor.registerClient(this);
 
                 this.socket.once('connect', () => {
-                    console.log('connection made');
-                    resolve();
+                    if (this.options.auth) {
+                        this.socket.emit('authentication', {
+                            username: this.options.auth.username,
+                            password: this.options.auth.username
+                        });
+                        this.socket.on('authenticated', function() {
+                            resolve();
+                        });
+                    } else {
+                        resolve();
+                    }
                 });
 
                 this.socket.on('playerJoined', (playerData) => {

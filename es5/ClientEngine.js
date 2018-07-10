@@ -171,8 +171,17 @@ var ClientEngine = function () {
                     _this.networkMonitor.registerClient(_this);
 
                     _this.socket.once('connect', function () {
-                        console.log('connection made');
-                        resolve();
+                        if (_this.options.auth) {
+                            _this.socket.emit('authentication', {
+                                username: _this.options.auth.username,
+                                password: _this.options.auth.username
+                            });
+                            _this.socket.on('authenticated', function () {
+                                resolve();
+                            });
+                        } else {
+                            resolve();
+                        }
                     });
 
                     _this.socket.on('playerJoined', function (playerData) {
