@@ -15,58 +15,60 @@ import MathUtils from '../lib/MathUtils';
  * of dynamic objects in-between server updates.
  */
 class DynamicObject extends GameObject {
-
     /**
-    * The netScheme is a dictionary of attributes in this game
-    * object.  The attributes listed in the netScheme are those exact
-    * attributes which will be serialized and sent from the server
-    * to each client on every server update.
-    * The netScheme member is implemented as a getter.
-    *
-    * You may choose not to implement this method, in which
-    * case your object only transmits the default attributes
-    * which are already part of {@link DynamicObject}.
-    * But if you choose to add more attributes, make sure
-    * the return value includes the netScheme of the super class.
-    *
-    * @memberof DynamicObject
-    * @member {Object} netScheme
-    * @example
-    *     static get netScheme() {
-    *       return Object.assign({
-    *           mojo: { type: Serializer.TYPES.UINT8 },
-    *         }, super.netScheme);
-    *     }
-    */
+     * The netScheme is a dictionary of attributes in this game
+     * object.  The attributes listed in the netScheme are those exact
+     * attributes which will be serialized and sent from the server
+     * to each client on every server update.
+     * The netScheme member is implemented as a getter.
+     *
+     * You may choose not to implement this method, in which
+     * case your object only transmits the default attributes
+     * which are already part of {@link DynamicObject}.
+     * But if you choose to add more attributes, make sure
+     * the return value includes the netScheme of the super class.
+     *
+     * @memberof DynamicObject
+     * @member {Object} netScheme
+     * @example
+     *     static get netScheme() {
+     *       return Object.assign({
+     *           mojo: { type: Serializer.TYPES.UINT8 },
+     *         }, super.netScheme);
+     *     }
+     */
     static get netScheme() {
-        return Object.assign({
-            playerId: { type: Serializer.TYPES.INT16 },
-            position: { type: Serializer.TYPES.CLASSINSTANCE },
-            width: { type: Serializer.TYPES.INT16 },
-            height: { type: Serializer.TYPES.INT16 },
-            velocity: { type: Serializer.TYPES.CLASSINSTANCE },
-            angle: { type: Serializer.TYPES.FLOAT32 }
-        }, super.netScheme);
+        return Object.assign(
+            {
+                playerId: { type: Serializer.TYPES.INT16 },
+                position: { type: Serializer.TYPES.CLASSINSTANCE },
+                width: { type: Serializer.TYPES.INT16 },
+                height: { type: Serializer.TYPES.INT16 },
+                velocity: { type: Serializer.TYPES.CLASSINSTANCE },
+                angle: { type: Serializer.TYPES.FLOAT32 }
+            },
+            super.netScheme
+        );
     }
 
     /**
-    * Creates an instance of a dynamic object.
-    * NOTE: all subclasses of this class must comply with this constructor signature.
-    *       This is required because the engine will create temporary instances when
-    *       syncs arrive on the clients.
-    * @param {GameEngine} gameEngine - the gameEngine this object will be used in
-    * @param {Object} options - options for the new object. See {@link GameObject}
-    * @param {Object} props - properties to be set in the new object
-    * @param {TwoVector} props.position - position vector
-    * @param {TwoVector} props.velocity - velocity vector
-    */
+     * Creates an instance of a dynamic object.
+     * NOTE: all subclasses of this class must comply with this constructor signature.
+     *       This is required because the engine will create temporary instances when
+     *       syncs arrive on the clients.
+     * @param {GameEngine} gameEngine - the gameEngine this object will be used in
+     * @param {Object} options - options for the new object. See {@link GameObject}
+     * @param {Object} props - properties to be set in the new object
+     * @param {TwoVector} props.position - position vector
+     * @param {TwoVector} props.velocity - velocity vector
+     */
     constructor(gameEngine, options, props) {
         super(gameEngine, options);
 
         /**
-        * ID of player who created this object
-        * @member {Number}
-        */
+         * ID of player who created this object
+         * @member {Number}
+         */
         this.playerId = 0;
 
         this.position = new TwoVector(0, 0);
@@ -97,61 +99,76 @@ class DynamicObject extends GameObject {
         this.affectedByGravity = true;
 
         /**
-        * position
-        * @member {TwoVector}
-        */
+         * position
+         * @member {TwoVector}
+         */
         if (props && props.position) this.position.copy(props.position);
 
         /**
-        * velocity
-        * @member {TwoVector}
-        */
+         * velocity
+         * @member {TwoVector}
+         */
         if (props && props.velocity) this.velocity.copy(props.velocity);
 
         /**
-        * object orientation angle in degrees
-        * @member {Number}
-        */
+         * object orientation angle in degrees
+         * @member {Number}
+         */
         this.angle = 90;
 
         /**
-        * should rotate left by {@link DynamicObject#rotationSpeed} on next step
-        * @member {Boolean}
-        */
+         * should rotate left by {@link DynamicObject#rotationSpeed} on next step
+         * @member {Boolean}
+         */
         this.isRotatingLeft = false;
 
         /**
-        * should rotate right by {@link DynamicObject#rotationSpeed} on next step
-        * @member {Boolean}
-        */
+         * should rotate right by {@link DynamicObject#rotationSpeed} on next step
+         * @member {Boolean}
+         */
         this.isRotatingRight = false;
 
         /**
-        * should accelerate by {@link DynamicObject#acceleration} on next step
-        * @member {Boolean}
-        */
+         * should accelerate by {@link DynamicObject#acceleration} on next step
+         * @member {Boolean}
+         */
         this.isAccelerating = false;
 
         /**
-        * angle rotation per step
-        * @member {Number}
-        */
+         * angle rotation per step
+         * @member {Number}
+         */
         this.rotationSpeed = 2.5;
 
         /**
-        * acceleration per step
-        * @member {Number}
-        */
+         * acceleration per step
+         * @member {Number}
+         */
         this.acceleration = 0.1;
 
+        /**
+         * @member {TwoVector}
+         */
         this.bending = new TwoVector(0, 0);
+
+        /**
+         * @member {Number}
+         */
         this.bendingAngle = 0;
+
+        /**
+         * @member {Number}
+         */
         this.deceleration = 0.99;
     }
 
     // convenience getters
-    get x() { return this.position.x; }
-    get y() { return this.position.y; }
+    get x() {
+        return this.position.x;
+    }
+    get y() {
+        return this.position.y;
+    }
 
     /**
      * Formatted textual description of the dynamic object.
@@ -161,8 +178,12 @@ class DynamicObject extends GameObject {
      * @return {String} description - a string describing the DynamicObject
      */
     toString() {
-        function round3(x) { return Math.round(x * 1000) / 1000; }
-        return `${this.constructor.name}[${this.id}] player${this.playerId} Pos=${this.position} Vel=${this.velocity} angle${round3(this.angle)}`;
+        function round3(x) {
+            return Math.round(x * 1000) / 1000;
+        }
+        return `${this.constructor.name}[${this.id}] player${
+            this.playerId
+        } Pos=${this.position} Vel=${this.velocity} angle${round3(this.angle)}`;
     }
 
     /**
@@ -171,16 +192,20 @@ class DynamicObject extends GameObject {
      */
     bendingToString() {
         if (this.bendingIncrements)
-            return `bend=${this.bending} angle=${this.bendingAngle} num_increments=${this.bendingIncrements}`;
+            return `bend=${this.bending} angle=${
+                this.bendingAngle
+            } num_increments=${this.bendingIncrements}`;
         return 'no bending';
     }
 
     /**
-    * The maximum velocity allowed.  If returns null then ignored.
-    * @memberof DynamicObject
-    * @member {Number} maxSpeed
-    */
-    get maxSpeed() { return null; }
+     * The maximum velocity allowed.  If returns null then ignored.
+     * @memberof DynamicObject
+     * @member {Number} maxSpeed
+     */
+    get maxSpeed() {
+        return null;
+    }
 
     syncTo(other) {
         super.syncTo(other);
@@ -193,8 +218,13 @@ class DynamicObject extends GameObject {
         this.deceleration = other.deceleration;
     }
 
-    bendToCurrent(original, bending, worldSettings, isLocal, bendingIncrements) {
-
+    bendToCurrent(
+        original,
+        bending,
+        worldSettings,
+        isLocal,
+        bendingIncrements
+    ) {
         // TODO: the bending parameters should now be an object,
         //     with a single getter bendingMultiples which has local
         //     and remote values for position, velocity, and angle
@@ -213,22 +243,61 @@ class DynamicObject extends GameObject {
         let angleBending = bending;
         if (typeof this.bendingAngleMultiple === 'number')
             angleBending = this.bendingAngleMultiple;
-        if (isLocal && (typeof this.bendingAngleLocalMultiple === 'number'))
+        if (isLocal && typeof this.bendingAngleLocalMultiple === 'number')
             angleBending = this.bendingAngleLocalMultiple;
 
         // bend to position, velocity, and angle gradually
         // TODO: consider using lerp() method of TwoVector instead.
         //     you will need implement lerpWrapped() first.
         if (worldSettings.worldWrap) {
-            this.bending.x = MathUtils.interpolateDeltaWithWrapping(original.position.x, this.position.x, bending, 0, worldSettings.width) / bendingIncrements;
-            this.bending.y = MathUtils.interpolateDeltaWithWrapping(original.position.y, this.position.y, bending, 0, worldSettings.height) / bendingIncrements;
+            this.bending.x =
+                MathUtils.interpolateDeltaWithWrapping(
+                    original.position.x,
+                    this.position.x,
+                    bending,
+                    0,
+                    worldSettings.width
+                ) / bendingIncrements;
+            this.bending.y =
+                MathUtils.interpolateDeltaWithWrapping(
+                    original.position.y,
+                    this.position.y,
+                    bending,
+                    0,
+                    worldSettings.height
+                ) / bendingIncrements;
         } else {
-            this.bending.x = MathUtils.interpolateDelta(original.position.x, this.position.x, bending) / bendingIncrements;
-            this.bending.y = MathUtils.interpolateDelta(original.position.y, this.position.y, bending) / bendingIncrements;
+            this.bending.x =
+                MathUtils.interpolateDelta(
+                    original.position.x,
+                    this.position.x,
+                    bending
+                ) / bendingIncrements;
+            this.bending.y =
+                MathUtils.interpolateDelta(
+                    original.position.y,
+                    this.position.y,
+                    bending
+                ) / bendingIncrements;
         }
-        this.bendingAngle = MathUtils.interpolateDeltaWithWrapping(original.angle, this.angle, angleBending, 0, 360) / bendingIncrements;
-        this.velocity.x = MathUtils.interpolate(original.velocity.x, this.velocity.x, velocityBending);
-        this.velocity.y = MathUtils.interpolate(original.velocity.y, this.velocity.y, velocityBending);
+        this.bendingAngle =
+            MathUtils.interpolateDeltaWithWrapping(
+                original.angle,
+                this.angle,
+                angleBending,
+                0,
+                360
+            ) / bendingIncrements;
+        this.velocity.x = MathUtils.interpolate(
+            original.velocity.x,
+            this.velocity.x,
+            velocityBending
+        );
+        this.velocity.y = MathUtils.interpolate(
+            original.velocity.y,
+            this.velocity.y,
+            velocityBending
+        );
 
         // revert to original
         this.position.copy(original.position);
@@ -236,8 +305,7 @@ class DynamicObject extends GameObject {
     }
 
     applyIncrementalBending() {
-        if (this.bendingIncrements === 0)
-            return;
+        if (this.bendingIncrements === 0) return;
 
         this.position.add(this.bending);
         this.angle += this.bendingAngle;
@@ -245,7 +313,6 @@ class DynamicObject extends GameObject {
     }
 
     interpolate(nextObj, playPercentage, worldSettings) {
-
         let px = this.position.x;
         let py = this.position.y;
         let angle = this.angle;
@@ -256,8 +323,7 @@ class DynamicObject extends GameObject {
             let val = nextObj[k];
             if (Serializer.typeCanAssign(this.constructor.netScheme[k].type))
                 this[k] = val;
-            else if (typeof val.clone === 'function')
-                this[k] = val.clone();
+            else if (typeof val.clone === 'function') this[k] = val.clone();
         }
 
         // update other objects with interpolation
@@ -266,12 +332,22 @@ class DynamicObject extends GameObject {
             if (Math.abs(end - start) > wrap / 2) return end;
             return (end - start) * p + start;
         }
-        this.position.x = calcInterpolate(px, nextObj.position.x, worldSettings.width, playPercentage);
-        this.position.y = calcInterpolate(py, nextObj.position.y, worldSettings.height, playPercentage);
+        this.position.x = calcInterpolate(
+            px,
+            nextObj.position.x,
+            worldSettings.width,
+            playPercentage
+        );
+        this.position.y = calcInterpolate(
+            py,
+            nextObj.position.y,
+            worldSettings.height,
+            playPercentage
+        );
 
-        var shortestAngle = ((((nextObj.angle - angle) % 360) + 540) % 360) - 180;
+        var shortestAngle =
+            ((((nextObj.angle - angle) % 360) + 540) % 360) - 180;
         this.angle = angle + shortestAngle * playPercentage;
-
     }
 
     getAABB() {

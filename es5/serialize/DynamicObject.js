@@ -49,29 +49,28 @@ var DynamicObject = function (_GameObject) {
     _createClass(DynamicObject, null, [{
         key: 'netScheme',
 
-
         /**
-        * The netScheme is a dictionary of attributes in this game
-        * object.  The attributes listed in the netScheme are those exact
-        * attributes which will be serialized and sent from the server
-        * to each client on every server update.
-        * The netScheme member is implemented as a getter.
-        *
-        * You may choose not to implement this method, in which
-        * case your object only transmits the default attributes
-        * which are already part of {@link DynamicObject}.
-        * But if you choose to add more attributes, make sure
-        * the return value includes the netScheme of the super class.
-        *
-        * @memberof DynamicObject
-        * @member {Object} netScheme
-        * @example
-        *     static get netScheme() {
-        *       return Object.assign({
-        *           mojo: { type: Serializer.TYPES.UINT8 },
-        *         }, super.netScheme);
-        *     }
-        */
+         * The netScheme is a dictionary of attributes in this game
+         * object.  The attributes listed in the netScheme are those exact
+         * attributes which will be serialized and sent from the server
+         * to each client on every server update.
+         * The netScheme member is implemented as a getter.
+         *
+         * You may choose not to implement this method, in which
+         * case your object only transmits the default attributes
+         * which are already part of {@link DynamicObject}.
+         * But if you choose to add more attributes, make sure
+         * the return value includes the netScheme of the super class.
+         *
+         * @memberof DynamicObject
+         * @member {Object} netScheme
+         * @example
+         *     static get netScheme() {
+         *       return Object.assign({
+         *           mojo: { type: Serializer.TYPES.UINT8 },
+         *         }, super.netScheme);
+         *     }
+         */
         get: function get() {
             return Object.assign({
                 playerId: { type: _Serializer2.default.TYPES.INT16 },
@@ -84,16 +83,16 @@ var DynamicObject = function (_GameObject) {
         }
 
         /**
-        * Creates an instance of a dynamic object.
-        * NOTE: all subclasses of this class must comply with this constructor signature.
-        *       This is required because the engine will create temporary instances when
-        *       syncs arrive on the clients.
-        * @param {GameEngine} gameEngine - the gameEngine this object will be used in
-        * @param {Object} options - options for the new object. See {@link GameObject}
-        * @param {Object} props - properties to be set in the new object
-        * @param {TwoVector} props.position - position vector
-        * @param {TwoVector} props.velocity - velocity vector
-        */
+         * Creates an instance of a dynamic object.
+         * NOTE: all subclasses of this class must comply with this constructor signature.
+         *       This is required because the engine will create temporary instances when
+         *       syncs arrive on the clients.
+         * @param {GameEngine} gameEngine - the gameEngine this object will be used in
+         * @param {Object} options - options for the new object. See {@link GameObject}
+         * @param {Object} props - properties to be set in the new object
+         * @param {TwoVector} props.position - position vector
+         * @param {TwoVector} props.velocity - velocity vector
+         */
 
     }]);
 
@@ -101,9 +100,9 @@ var DynamicObject = function (_GameObject) {
         _classCallCheck(this, DynamicObject);
 
         /**
-        * ID of player who created this object
-        * @member {Number}
-        */
+         * ID of player who created this object
+         * @member {Number}
+         */
         var _this = _possibleConstructorReturn(this, (DynamicObject.__proto__ || Object.getPrototypeOf(DynamicObject)).call(this, gameEngine, options));
 
         _this.playerId = 0;
@@ -136,55 +135,66 @@ var DynamicObject = function (_GameObject) {
         _this.affectedByGravity = true;
 
         /**
-        * position
-        * @member {TwoVector}
-        */
+         * position
+         * @member {TwoVector}
+         */
         if (props && props.position) _this.position.copy(props.position);
 
         /**
-        * velocity
-        * @member {TwoVector}
-        */
+         * velocity
+         * @member {TwoVector}
+         */
         if (props && props.velocity) _this.velocity.copy(props.velocity);
 
         /**
-        * object orientation angle in degrees
-        * @member {Number}
-        */
+         * object orientation angle in degrees
+         * @member {Number}
+         */
         _this.angle = 90;
 
         /**
-        * should rotate left by {@link DynamicObject#rotationSpeed} on next step
-        * @member {Boolean}
-        */
+         * should rotate left by {@link DynamicObject#rotationSpeed} on next step
+         * @member {Boolean}
+         */
         _this.isRotatingLeft = false;
 
         /**
-        * should rotate right by {@link DynamicObject#rotationSpeed} on next step
-        * @member {Boolean}
-        */
+         * should rotate right by {@link DynamicObject#rotationSpeed} on next step
+         * @member {Boolean}
+         */
         _this.isRotatingRight = false;
 
         /**
-        * should accelerate by {@link DynamicObject#acceleration} on next step
-        * @member {Boolean}
-        */
+         * should accelerate by {@link DynamicObject#acceleration} on next step
+         * @member {Boolean}
+         */
         _this.isAccelerating = false;
 
         /**
-        * angle rotation per step
-        * @member {Number}
-        */
+         * angle rotation per step
+         * @member {Number}
+         */
         _this.rotationSpeed = 2.5;
 
         /**
-        * acceleration per step
-        * @member {Number}
-        */
+         * acceleration per step
+         * @member {Number}
+         */
         _this.acceleration = 0.1;
 
+        /**
+         * @member {TwoVector}
+         */
         _this.bending = new _TwoVector2.default(0, 0);
+
+        /**
+         * @member {Number}
+         */
         _this.bendingAngle = 0;
+
+        /**
+         * @member {Number}
+         */
         _this.deceleration = 0.99;
         return _this;
     }
@@ -223,10 +233,10 @@ var DynamicObject = function (_GameObject) {
         }
 
         /**
-        * The maximum velocity allowed.  If returns null then ignored.
-        * @memberof DynamicObject
-        * @member {Number} maxSpeed
-        */
+         * The maximum velocity allowed.  If returns null then ignored.
+         * @memberof DynamicObject
+         * @member {Number} maxSpeed
+         */
 
     }, {
         key: 'syncTo',
@@ -243,7 +253,6 @@ var DynamicObject = function (_GameObject) {
     }, {
         key: 'bendToCurrent',
         value: function bendToCurrent(original, bending, worldSettings, isLocal, bendingIncrements) {
-
             // TODO: the bending parameters should now be an object,
             //     with a single getter bendingMultiples which has local
             //     and remote values for position, velocity, and angle
@@ -291,7 +300,6 @@ var DynamicObject = function (_GameObject) {
     }, {
         key: 'interpolate',
         value: function interpolate(nextObj, playPercentage, worldSettings) {
-
             var px = this.position.x;
             var py = this.position.y;
             var angle = this.angle;
