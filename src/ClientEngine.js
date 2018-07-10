@@ -129,9 +129,10 @@ class ClientEngine {
                     if (this.options.auth) {
                         this.socket.emit('authentication', {
                             username: this.options.auth.username,
-                            password: this.options.auth.username
+                            password: this.options.auth.password
                         });
                         this.socket.on('authenticated', function() {
+                            console.log("authentication complete");
                             resolve();
                         });
                     } else {
