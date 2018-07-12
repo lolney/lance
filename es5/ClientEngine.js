@@ -174,9 +174,10 @@ var ClientEngine = function () {
                         if (_this.options.auth) {
                             _this.socket.emit('authentication', {
                                 username: _this.options.auth.username,
-                                password: _this.options.auth.username
+                                password: _this.options.auth.password
                             });
                             _this.socket.on('authenticated', function () {
+                                console.log("authentication complete");
                                 resolve();
                             });
                         } else {
