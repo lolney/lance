@@ -3,7 +3,6 @@ import HSHG from './HSHG';
 // Collision detection based on Hierarchical Spatial Hash Grid
 // uses this implementation https://gist.github.com/kirbysayshi/1760774
 export default class HSHGCollisionDetection {
-
     constructor(options) {
         this.options = Object.assign({ COLLISION_DISTANCE: 28 }, options);
     }
@@ -27,13 +26,18 @@ export default class HSHGCollisionDetection {
 
     detect() {
         this.grid.update();
-        this.stepCollidingPairs = this.grid.queryForCollisionPairs().reduce((accumulator, currentValue, i) => {
-            let pairId = getArrayPairId(currentValue);
-            accumulator[pairId] = { o1: currentValue[0], o2: currentValue[1] };
-            return accumulator;
-        }, {});
+        this.stepCollidingPairs = this.grid
+            .queryForCollisionPairs()
+            .reduce((accumulator, currentValue, i) => {
+                let pairId = getArrayPairId(currentValue);
+                accumulator[pairId] = {
+                    o1: currentValue[0],
+                    o2: currentValue[1]
+                };
+                return accumulator;
+            }, {});
 
-        for (let pairId of Object.keys(this.previousCollisionPairs)){
+        for (let pairId of Object.keys(this.previousCollisionPairs)) {
             let pairObj = this.previousCollisionPairs[pairId];
 
             // existed in previous pairs, but not during this step: this pair stopped colliding
@@ -42,16 +46,19 @@ export default class HSHGCollisionDetection {
             }
         }
 
+        let collisionObjects = [];
         for (let pairId of Object.keys(this.stepCollidingPairs)) {
             let pairObj = this.stepCollidingPairs[pairId];
 
             // didn't exist in previous pairs, but exists now: this is a new colliding pair
             if (pairId in this.previousCollisionPairs === false) {
                 this.gameEngine.emit('collisionStart', pairObj);
+                collisionObjects.push(pairObj);
             }
         }
 
         this.previousCollisionPairs = this.stepCollidingPairs;
+        return collisionObjects;
     }
 
     /**
@@ -60,16 +67,15 @@ export default class HSHGCollisionDetection {
      * @param o2 {Object} second object
      * @returns {boolean} are the two objects colliding?
      */
-    areObjectsColliding(o1, o2){
-        return getArrayPairId([o1,o2]) in this.stepCollidingPairs;
+    areObjectsColliding(o1, o2) {
+        return getArrayPairId([o1, o2]) in this.stepCollidingPairs;
     }
-
 }
 
-function getArrayPairId(arrayPair){
+function getArrayPairId(arrayPair) {
     // make sure to get the same id regardless of object order
     let sortedArrayPair = arrayPair.slice(0).sort();
     return sortedArrayPair[0].id + '-' + sortedArrayPair[1].id;
 }
 
-module.exports = HSHGCollisionDetection ;
+module.exports = HSHGCollisionDetection;

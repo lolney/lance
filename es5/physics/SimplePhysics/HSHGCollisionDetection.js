@@ -49,7 +49,10 @@ var HSHGCollisionDetection = function () {
             this.grid.update();
             this.stepCollidingPairs = this.grid.queryForCollisionPairs().reduce(function (accumulator, currentValue, i) {
                 var pairId = getArrayPairId(currentValue);
-                accumulator[pairId] = { o1: currentValue[0], o2: currentValue[1] };
+                accumulator[pairId] = {
+                    o1: currentValue[0],
+                    o2: currentValue[1]
+                };
                 return accumulator;
             }, {});
 
@@ -83,6 +86,7 @@ var HSHGCollisionDetection = function () {
                 }
             }
 
+            var collisionObjects = [];
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -96,6 +100,7 @@ var HSHGCollisionDetection = function () {
                     // didn't exist in previous pairs, but exists now: this is a new colliding pair
                     if (_pairId in this.previousCollisionPairs === false) {
                         this.gameEngine.emit('collisionStart', _pairObj);
+                        collisionObjects.push(_pairObj);
                     }
                 }
             } catch (err) {
@@ -114,6 +119,7 @@ var HSHGCollisionDetection = function () {
             }
 
             this.previousCollisionPairs = this.stepCollidingPairs;
+            return collisionObjects;
         }
 
         /**
