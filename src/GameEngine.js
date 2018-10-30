@@ -151,6 +151,8 @@ class GameEngine {
         for (const [event, listener] of this.events) {
             console.log('removing listener: {}', {});
             super.removeListener(event, listener);
+            console.log('removing listener:', event);
+            this.removeListener(event, listener);
         }
     }
 
