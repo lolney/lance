@@ -34,6 +34,7 @@ export default class Scheduler {
         this.once = eventEmitter.once;
         this.removeListener = eventEmitter.removeListener;
         this.emit = eventEmitter.emit;
+        this.stopped = false;
     }
 
     // in same cases, setTimeout is ignored by the browser,
@@ -52,6 +53,9 @@ export default class Scheduler {
     nextTick() {
         let stepStartTime = (new Date()).getTime();
         if (stepStartTime > this.nextExecTime + this.options.period * LOOP_SLOW_THRESH) {
+        if (this.stopped) {
+            return;
+        }
             this.delayCounter++;
         } else
             this.delayCounter = 0;
@@ -79,6 +83,10 @@ export default class Scheduler {
         if (typeof window === 'object' && typeof window.requestAnimationFrame === 'function')
             window.requestAnimationFrame(this.nextTickChecker.bind(this));
         return this;
+    }
+
+    stop() {
+        this.stopped = true;
     }
 
     /**

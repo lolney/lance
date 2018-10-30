@@ -26,7 +26,6 @@ var LOOP_SLOW_COUNT = 10;
  */
 
 var Scheduler = function () {
-
     /**
      * schedule a function to be called
      *
@@ -53,6 +52,7 @@ var Scheduler = function () {
         this.once = eventEmitter.once;
         this.removeListener = eventEmitter.removeListener;
         this.emit = eventEmitter.emit;
+        this.stopped = false;
     }
 
     // in same cases, setTimeout is ignored by the browser,
@@ -74,6 +74,9 @@ var Scheduler = function () {
     }, {
         key: 'nextTick',
         value: function nextTick() {
+            if (this.stopped) {
+                return;
+            }
             var stepStartTime = new Date().getTime();
             if (stepStartTime > this.nextExecTime + this.options.period * LOOP_SLOW_THRESH) {
                 this.delayCounter++;
@@ -105,6 +108,11 @@ var Scheduler = function () {
             setTimeout(this.nextTick.bind(this));
             if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(this.nextTickChecker.bind(this));
             return this;
+        }
+    }, {
+        key: 'stop',
+        value: function stop() {
+            this.stopped = true;
         }
 
         /**
