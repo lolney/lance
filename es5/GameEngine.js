@@ -6,8 +6,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _GameWorld = require('./GameWorld');
@@ -59,8 +57,6 @@ var GameEngine = function () {
      * @param {Number} options.delayInputCount - client side only.  Introduce an artificial delay on the client to better match the time it will occur on the server.  This value sets the number of steps the client will wait before applying the input locally
      */
     function GameEngine(options) {
-        var _this = this;
-
         _classCallCheck(this, GameEngine);
 
         // TODO I think we should discuss this whole globals issues
@@ -85,7 +81,6 @@ var GameEngine = function () {
 
         // set up event emitting and interface
         var eventEmitter = new _eventemitter2.default();
-        this.events = [];
 
         /**
          * Register a handler for an event
@@ -96,10 +91,7 @@ var GameEngine = function () {
          * @param {String} eventName - name of the event
          * @param {Function} eventHandler - handler function
          */
-        this.on = function (event, listener) {
-            eventEmitter.on(event, listener);
-            _this.events.push([event, listener]);
-        };
+        this.on = eventEmitter.on;
 
         /**
          * Register a handler for an event, called just once (if at all)
@@ -122,6 +114,8 @@ var GameEngine = function () {
          * @param {Function} eventHandler - handler function
          */
         this.removeListener = eventEmitter.removeListener;
+
+        this.removeAllListeners = eventEmitter.removeAllListeners;
 
         this.emit = eventEmitter.emit;
 
@@ -191,7 +185,7 @@ var GameEngine = function () {
     }, {
         key: 'start',
         value: function start() {
-            var _this2 = this;
+            var _this = this;
 
             this.trace.info(function () {
                 return '========== game engine started ==========';
@@ -202,7 +196,7 @@ var GameEngine = function () {
             this.timer = new _Timer2.default();
             this.timer.play();
             this.on('postStep', function (step, isReenact) {
-                if (!isReenact) _this2.timer.tick();
+                if (!isReenact) _this.timer.tick();
             });
 
             this.emit('start', { timestamp: new Date().getTime() });
@@ -210,33 +204,7 @@ var GameEngine = function () {
     }, {
         key: 'stop',
         value: function stop() {
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this.events[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var _step2$value = _slicedToArray(_step2.value, 2),
-                        event = _step2$value[0],
-                        listener = _step2$value[1];
-
-                    console.log('removing listener:', event);
-                    this.removeListener(event, listener);
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
+            this.removeAllListeners();
         }
 
         /**
@@ -251,7 +219,7 @@ var GameEngine = function () {
     }, {
         key: 'step',
         value: function step(isReenact, t, dt, physicsOnly) {
-            var _this3 = this;
+            var _this2 = this;
 
             // physics-only step
             if (physicsOnly) {
@@ -284,7 +252,7 @@ var GameEngine = function () {
             // - refresh object positions after physics
             this.world.forEachObject(function (id, o) {
                 if (typeof o.refreshFromPhysics === 'function') o.refreshFromPhysics();
-                _this3.trace.trace(function () {
+                _this2.trace.trace(function () {
                     return 'object[' + id + '] after ' + (isReenact ? 'reenact' : 'step') + ' : ' + o.toString();
                 });
             });

@@ -53,7 +53,6 @@ class GameEngine {
 
         // set up event emitting and interface
         let eventEmitter = new EventEmitter();
-        this.events = [];
 
         /**
          * Register a handler for an event
@@ -68,6 +67,7 @@ class GameEngine {
             eventEmitter.on(event, listener);
             this.events.push([event, listener]);
         };
+        this.on = eventEmitter.on;
 
         /**
          * Register a handler for an event, called just once (if at all)
@@ -90,6 +90,8 @@ class GameEngine {
          * @param {Function} eventHandler - handler function
          */
         this.removeListener = eventEmitter.removeListener;
+
+        this.removeAllListeners = eventEmitter.removeAllListeners;
 
         this.emit = eventEmitter.emit;
 
@@ -148,12 +150,7 @@ class GameEngine {
         this.emit('start', { timestamp: (new Date()).getTime() });
 
     stop() {
-        for (const [event, listener] of this.events) {
-            console.log('removing listener: {}', {});
-            super.removeListener(event, listener);
-            console.log('removing listener:', event);
-            this.removeListener(event, listener);
-        }
+        this.removeAllListeners();
     }
 
     /**
