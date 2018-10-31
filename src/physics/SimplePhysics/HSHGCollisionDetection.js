@@ -12,30 +12,43 @@ export default class HSHGCollisionDetection {
         this.grid = new HSHG();
         this.previousCollisionPairs = {};
         this.stepCollidingPairs = {};
+        this.objects = [];
+        this.keyObjectDetection = options.keyObjectDetection;
 
         this.gameEngine.on('objectAdded', obj => {
             // add the gameEngine obj the the spatial grid
             this.grid.addObject(obj);
+            if (obj.isKeyObject) {
+                this.objects.push(obj);
+            }
         });
 
         this.gameEngine.on('objectDestroyed', obj => {
             // add the gameEngine obj the the spatial grid
             this.grid.removeObject(obj);
+            if (obj.isKeyObject) {
+                this.objects.splice(this.objects.indexOf(obj), 1);
+            }
         });
     }
 
     detect() {
+        let possibleCollisions = this.keyObjectDetection ?
+            this.grid.queryForCollisionPairsWithObjs(this.objects) :
+            this.grid.queryForCollisionPairs();
+
         this.grid.update();
-        this.stepCollidingPairs = this.grid
-            .queryForCollisionPairs()
-            .reduce((accumulator, currentValue, i) => {
+        this.stepCollidingPairs = possibleCollisions.reduce(
+            (accumulator, currentValue, i) => {
                 let pairId = getArrayPairId(currentValue);
                 accumulator[pairId] = {
                     o1: currentValue[0],
                     o2: currentValue[1]
                 };
                 return accumulator;
-            }, {});
+            },
+            {}
+        );
 
         for (let pairId of Object.keys(this.previousCollisionPairs)) {
             let pairObj = this.previousCollisionPairs[pairId];

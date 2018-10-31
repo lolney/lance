@@ -61,7 +61,7 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
 
         if (initOptions.gravity) _this.gravity.copy(initOptions.gravity);
 
-        var collisionOptions = Object.assign({ gameEngine: _this.gameEngine }, initOptions.collisionOptions);
+        var collisionOptions = Object.assign({ gameEngine: _this.gameEngine }, initOptions.collisions);
         _this.collisionDetection.init(collisionOptions);
         return _this;
     }
@@ -74,7 +74,6 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
     _createClass(SimplePhysicsEngine, [{
         key: 'objectStep',
         value: function objectStep(o, dt) {
-
             // calculate factor
             if (dt === 0) return;
 
@@ -141,7 +140,6 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
     }, {
         key: 'step',
         value: function step(dt, objectFilter) {
-
             // each object should advance
             var objects = this.gameEngine.world.objects;
             var _iteratorNormalCompletion = true;
@@ -151,7 +149,6 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
             try {
                 for (var _iterator = Object.keys(objects)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var objId = _step.value;
-
 
                     // shadow objects are not re-enacted
                     var ob = objects[objId];

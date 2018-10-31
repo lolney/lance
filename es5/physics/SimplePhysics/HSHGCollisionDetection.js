@@ -32,22 +32,32 @@ var HSHGCollisionDetection = function () {
             this.grid = new _HSHG2.default();
             this.previousCollisionPairs = {};
             this.stepCollidingPairs = {};
+            this.objects = [];
+            this.keyObjectDetection = options.keyObjectDetection;
 
             this.gameEngine.on('objectAdded', function (obj) {
                 // add the gameEngine obj the the spatial grid
                 _this.grid.addObject(obj);
+                if (obj.isKeyObject) {
+                    _this.objects.push(obj);
+                }
             });
 
             this.gameEngine.on('objectDestroyed', function (obj) {
                 // add the gameEngine obj the the spatial grid
                 _this.grid.removeObject(obj);
+                if (obj.isKeyObject) {
+                    _this.objects.splice(_this.objects.indexOf(obj), 1);
+                }
             });
         }
     }, {
         key: 'detect',
         value: function detect() {
+            var possibleCollisions = this.keyObjectDetection ? this.grid.queryForCollisionPairsWithObjs(this.objects) : this.grid.queryForCollisionPairs();
+
             this.grid.update();
-            this.stepCollidingPairs = this.grid.queryForCollisionPairs().reduce(function (accumulator, currentValue, i) {
+            this.stepCollidingPairs = possibleCollisions.reduce(function (accumulator, currentValue, i) {
                 var pairId = getArrayPairId(currentValue);
                 accumulator[pairId] = {
                     o1: currentValue[0],
