@@ -196,7 +196,7 @@ var ClientEngine = function () {
                 });
             };
 
-            var matchmaker = Promise.resolve({ serverURL: null, status: 'ok' });
+            var matchmaker = Promise.resolve({ serverURL: this.options.serverURL, status: 'ok' });
             if (this.options.matchmaker) matchmaker = _Utils2.default.httpGetPromise(this.options.matchmaker);
 
             return matchmaker.then(connectSocket);
