@@ -151,7 +151,7 @@ class ClientEngine {
             });
         };
 
-        let matchmaker = Promise.resolve({ serverURL: null, status: 'ok' });
+        let matchmaker = Promise.resolve({ serverURL: this.options.serverURL, status: 'ok' });
         if (this.options.matchmaker)
             matchmaker = Utils.httpGetPromise(this.options.matchmaker);
 
