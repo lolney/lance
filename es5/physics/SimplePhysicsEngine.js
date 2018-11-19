@@ -61,11 +61,7 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
 
         if (initOptions.gravity) _this.gravity.copy(initOptions.gravity);
 
-<<<<<<< HEAD
         var collisionOptions = Object.assign({ gameEngine: _this.gameEngine }, initOptions.collisions);
-=======
-        var collisionOptions = Object.assign({ gameEngine: _this.gameEngine }, initOptions.collisionOptions);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         _this.collisionDetection.init(collisionOptions);
         return _this;
     }
@@ -78,10 +74,6 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
     _createClass(SimplePhysicsEngine, [{
         key: 'objectStep',
         value: function objectStep(o, dt) {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             // calculate factor
             if (dt === 0) return;
 
@@ -89,10 +81,7 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
 
             var worldSettings = this.gameEngine.worldSettings;
 
-<<<<<<< HEAD
-=======
             // TODO: remove this code in version 4: these attributes are deprecated
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             if (o.isRotatingRight) {
                 o.angle += o.rotationSpeed;
             }
@@ -100,10 +89,7 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
                 o.angle -= o.rotationSpeed;
             }
 
-<<<<<<< HEAD
-=======
             // TODO: remove this code in version 4: these attributes are deprecated
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             if (o.angle >= 360) {
                 o.angle -= 360;
             }
@@ -111,10 +97,7 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
                 o.angle += 360;
             }
 
-<<<<<<< HEAD
-=======
             // TODO: remove this code in version 4: these attributes are deprecated
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             if (o.isAccelerating) {
                 var rad = o.angle * (Math.PI / 180);
                 dv.set(Math.cos(rad), Math.sin(rad)).multiplyScalar(o.acceleration).multiplyScalar(dt);
@@ -160,10 +143,6 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
     }, {
         key: 'step',
         value: function step(dt, objectFilter) {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             // each object should advance
             var objects = this.gameEngine.world.objects;
             var _iteratorNormalCompletion = true;
@@ -174,10 +153,6 @@ var SimplePhysicsEngine = function (_PhysicsEngine) {
                 for (var _iterator = Object.keys(objects)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var objId = _step.value;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                     // shadow objects are not re-enacted
                     var ob = objects[objId];
                     if (!objectFilter(ob)) continue;

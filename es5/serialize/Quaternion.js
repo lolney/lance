@@ -10,15 +10,9 @@ var _Serializable2 = require('./Serializable');
 
 var _Serializable3 = _interopRequireDefault(_Serializable2);
 
-<<<<<<< HEAD
-var _Serializer = require('./Serializer');
-
-var _Serializer2 = _interopRequireDefault(_Serializer);
-=======
 var _BaseTypes = require('./BaseTypes');
 
 var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
 var _ThreeVector = require('./ThreeVector');
 
@@ -32,20 +26,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-<<<<<<< HEAD
-=======
 var SHOW_AS_AXIS_ANGLE = true;
 var MAX_DEL_THETA = 0.2;
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 /**
  * A Quaternion is a geometric object which can be used to
  * represent a three-dimensional rotation.
  */
-<<<<<<< HEAD
-=======
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 var Quaternion = function (_Serializable) {
     _inherits(Quaternion, _Serializable);
 
@@ -53,17 +41,10 @@ var Quaternion = function (_Serializable) {
         key: 'netScheme',
         get: function get() {
             return {
-<<<<<<< HEAD
-                w: { type: _Serializer2.default.TYPES.FLOAT32 },
-                x: { type: _Serializer2.default.TYPES.FLOAT32 },
-                y: { type: _Serializer2.default.TYPES.FLOAT32 },
-                z: { type: _Serializer2.default.TYPES.FLOAT32 }
-=======
                 w: { type: _BaseTypes2.default.TYPES.FLOAT32 },
                 x: { type: _BaseTypes2.default.TYPES.FLOAT32 },
                 y: { type: _BaseTypes2.default.TYPES.FLOAT32 },
                 z: { type: _BaseTypes2.default.TYPES.FLOAT32 }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             };
         }
 
@@ -105,15 +86,11 @@ var Quaternion = function (_Serializable) {
             function round3(x) {
                 return Math.round(x * 1000) / 1000;
             }
-<<<<<<< HEAD
-            return 'quaternion(' + round3(this.w) + ', ' + round3(this.x) + ', ' + round3(this.y) + ', ' + round3(this.z) + ')';
-=======
             if (SHOW_AS_AXIS_ANGLE) {
                 var axisAngle = this.toAxisAngle();
                 return '[' + round3(axisAngle.angle) + ',' + axisAngle.axis.toString() + ']';
             }
             return '[' + round3(this.w) + ', ' + round3(this.x) + ', ' + round3(this.y) + ', ' + round3(this.z) + ']';
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
 
         /**
@@ -163,10 +140,7 @@ var Quaternion = function (_Serializable) {
 
             // assuming quaternion normalised then w is less than 1, so term always positive.
             var axis = new _ThreeVector2.default(1, 0, 0);
-<<<<<<< HEAD
-=======
             this.normalize();
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             var angle = 2 * Math.acos(this.w);
             var s = Math.sqrt(1 - this.w * this.w);
             if (s > 0.001) {
@@ -175,10 +149,6 @@ var Quaternion = function (_Serializable) {
                 axis.y = this.y * divS;
                 axis.z = this.z * divS;
             }
-<<<<<<< HEAD
-            return { axis: axis, angle: angle };
-        }
-=======
             if (s > Math.PI) {
                 s -= 2 * Math.PI;
             }
@@ -203,7 +173,6 @@ var Quaternion = function (_Serializable) {
 
             return this;
         }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
         /**
          * set the values of this quaternion from an axis/angle representation
@@ -217,10 +186,7 @@ var Quaternion = function (_Serializable) {
         key: 'setFromAxisAngle',
         value: function setFromAxisAngle(axis, angle) {
 
-<<<<<<< HEAD
-=======
             if (angle < 0) angle += Math.PI * 2;
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             var halfAngle = angle * 0.5;
             var s = Math.sin(halfAngle);
             this.x = axis.x * s;
@@ -288,13 +254,10 @@ var Quaternion = function (_Serializable) {
     }, {
         key: 'slerp',
         value: function slerp(target, bending) {
-<<<<<<< HEAD
-=======
 
             if (bending <= 0) return this;
             if (bending >= 1) return this.copy(target);
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             var aw = this.w,
                 ax = this.x,
                 ay = this.y,
@@ -317,17 +280,6 @@ var Quaternion = function (_Serializable) {
                 return this;
             }
 
-<<<<<<< HEAD
-            var sinHalfTheta = Math.sqrt(1.0 - cosHalfTheta * cosHalfTheta);
-            if (Math.abs(sinHalfTheta) < 0.001) {
-                this.set(0.5 * (aw + this.w), 0.5 * (ax + this.x), 0.5 * (ay + this.y), 0.5 * (az + this.z));
-                return this;
-            }
-
-            var halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
-            var ratioA = Math.sin((1 - bending) * halfTheta) / sinHalfTheta;
-            var ratioB = Math.sin(bending * halfTheta) / sinHalfTheta;
-=======
             var sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
             if (sqrSinHalfTheta < Number.EPSILON) {
                 var s = 1 - t;
@@ -341,7 +293,6 @@ var Quaternion = function (_Serializable) {
             if (Math.abs(delTheta) > MAX_DEL_THETA) delTheta = MAX_DEL_THETA * Math.sign(delTheta);
             var ratioA = Math.sin(halfTheta - delTheta) / sinHalfTheta;
             var ratioB = Math.sin(delTheta) / sinHalfTheta;
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             this.set(aw * ratioA + this.w * ratioB, ax * ratioA + this.x * ratioB, ay * ratioA + this.y * ratioB, az * ratioA + this.z * ratioB);
             return this;
         }

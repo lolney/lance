@@ -10,15 +10,9 @@ var _Serializable2 = require('./Serializable');
 
 var _Serializable3 = _interopRequireDefault(_Serializable2);
 
-<<<<<<< HEAD
-var _Serializer = require('./Serializer');
-
-var _Serializer2 = _interopRequireDefault(_Serializer);
-=======
 var _BaseTypes = require('./BaseTypes');
 
 var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,15 +33,9 @@ var ThreeVector = function (_Serializable) {
         key: 'netScheme',
         get: function get() {
             return {
-<<<<<<< HEAD
-                x: { type: _Serializer2.default.TYPES.FLOAT32 },
-                y: { type: _Serializer2.default.TYPES.FLOAT32 },
-                z: { type: _Serializer2.default.TYPES.FLOAT32 }
-=======
                 x: { type: _BaseTypes2.default.TYPES.FLOAT32 },
                 y: { type: _BaseTypes2.default.TYPES.FLOAT32 },
                 z: { type: _BaseTypes2.default.TYPES.FLOAT32 }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             };
         }
 
@@ -87,11 +75,7 @@ var ThreeVector = function (_Serializable) {
             function round3(x) {
                 return Math.round(x * 1000) / 1000;
             }
-<<<<<<< HEAD
-            return '(' + round3(this.x) + ', ' + round3(this.y) + ', ' + round3(this.z) + ')';
-=======
             return '[' + round3(this.x) + ', ' + round3(this.y) + ', ' + round3(this.z) + ']';
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
 
         /**
@@ -202,8 +186,6 @@ var ThreeVector = function (_Serializable) {
         }
 
         /**
-<<<<<<< HEAD
-=======
          * Create a clone of this vector
          *
          * @return {ThreeVector} returns clone
@@ -216,7 +198,6 @@ var ThreeVector = function (_Serializable) {
         }
 
         /**
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          * Apply in-place lerp (linear interpolation) to this ThreeVector
          * towards another ThreeVector
          * @param {ThreeVector} target the target vector
@@ -232,8 +213,6 @@ var ThreeVector = function (_Serializable) {
             this.z += (target.z - this.z) * p;
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Get bending Delta Vector
@@ -264,7 +243,6 @@ var ThreeVector = function (_Serializable) {
 
             return increment;
         }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }]);
 
     return ThreeVector;

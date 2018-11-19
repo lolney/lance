@@ -10,15 +10,9 @@ var _Serializable2 = require('./Serializable');
 
 var _Serializable3 = _interopRequireDefault(_Serializable2);
 
-<<<<<<< HEAD
-var _Serializer = require('./Serializer');
-
-var _Serializer2 = _interopRequireDefault(_Serializer);
-=======
 var _BaseTypes = require('./BaseTypes');
 
 var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,13 +33,8 @@ var TwoVector = function (_Serializable) {
         key: 'netScheme',
         get: function get() {
             return {
-<<<<<<< HEAD
-                x: { type: _Serializer2.default.TYPES.FLOAT32 },
-                y: { type: _Serializer2.default.TYPES.FLOAT32 }
-=======
                 x: { type: _BaseTypes2.default.TYPES.FLOAT32 },
                 y: { type: _BaseTypes2.default.TYPES.FLOAT32 }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             };
         }
 
@@ -83,10 +72,6 @@ var TwoVector = function (_Serializable) {
             function round3(x) {
                 return Math.round(x * 1000) / 1000;
             }
-<<<<<<< HEAD
-            return '(' + round3(this.x) + ', ' + round3(this.y) + ')';
-        }
-=======
             return '[' + round3(this.x) + ', ' + round3(this.y) + ']';
         }
 
@@ -98,7 +83,6 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'set',
         value: function set(x, y) {
@@ -114,8 +98,6 @@ var TwoVector = function (_Serializable) {
 
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Multiply this TwoVector by a scalar
@@ -124,7 +106,6 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'multiplyScalar',
         value: function multiplyScalar(s) {
@@ -133,8 +114,6 @@ var TwoVector = function (_Serializable) {
 
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Add other vector to this vector
@@ -143,7 +122,6 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'add',
         value: function add(other) {
@@ -152,8 +130,6 @@ var TwoVector = function (_Serializable) {
 
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Subtract other vector to this vector
@@ -162,7 +138,6 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'subtract',
         value: function subtract(other) {
@@ -171,8 +146,6 @@ var TwoVector = function (_Serializable) {
 
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Get vector length
@@ -180,14 +153,11 @@ var TwoVector = function (_Serializable) {
          * @return {Number} length of this vector
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'length',
         value: function length() {
             return Math.sqrt(this.x * this.x + this.y * this.y);
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Normalize this vector, in-place
@@ -195,15 +165,12 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'normalize',
         value: function normalize() {
             this.multiplyScalar(1 / this.length());
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Copy values from another TwoVector into this TwoVector
@@ -212,7 +179,6 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'copy',
         value: function copy(sourceObj) {
@@ -221,8 +187,6 @@ var TwoVector = function (_Serializable) {
 
             return this;
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Create a clone of this vector
@@ -230,14 +194,11 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns clone
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'clone',
         value: function clone() {
             return new TwoVector(this.x, this.y);
         }
-<<<<<<< HEAD
-=======
 
         /**
          * Apply in-place lerp (linear interpolation) to this TwoVector
@@ -247,14 +208,11 @@ var TwoVector = function (_Serializable) {
          * @return {TwoVector} returns self
          */
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }, {
         key: 'lerp',
         value: function lerp(target, p) {
             this.x += (target.x - this.x) * p;
             this.y += (target.y - this.y) * p;
-<<<<<<< HEAD
-=======
 
             return this;
         }
@@ -287,7 +245,6 @@ var TwoVector = function (_Serializable) {
             increment.multiplyScalar(1 / options.increments);
 
             return increment;
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
     }]);
 

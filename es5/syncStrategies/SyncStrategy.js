@@ -4,11 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-<<<<<<< HEAD
-=======
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20,10 +17,6 @@ var SyncStrategy = function () {
         this.clientEngine = clientEngine;
         this.gameEngine = clientEngine.gameEngine;
         this.options = Object.assign({}, inputOptions);
-<<<<<<< HEAD
-        this.gameEngine.on('client__syncReceived', this.collectSync.bind(this));
-        this.requiredSyncs = [];
-=======
         this.gameEngine.on('client__postStep', this.syncStep.bind(this));
         this.gameEngine.on('client__syncReceived', this.collectSync.bind(this));
         this.requiredSyncs = [];
@@ -33,7 +26,6 @@ var SyncStrategy = function () {
             onEveryStep: { MAX_LEAD: 7, MAX_LAG: 8 }, // max step lead/lag allowed at every step
             clientReset: 20 // if we are behind this many steps, just reset the step counter
         };
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }
 
     // collect a sync and its events
@@ -103,8 +95,6 @@ var SyncStrategy = function () {
                 return 'sync contains ' + objCount + ' objects ' + eventCount + ' events ' + stepCount + ' steps';
             });
         }
-<<<<<<< HEAD
-=======
 
         // add an object to our world
 
@@ -166,7 +156,6 @@ var SyncStrategy = function () {
                 if (rc === this.SYNC_APPLIED) this.lastSync = null;
             }
         }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }]);
 
     return SyncStrategy;

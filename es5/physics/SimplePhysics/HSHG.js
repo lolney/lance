@@ -25,10 +25,6 @@ Object.defineProperty(exports, "__esModule", {
  * @return  void   desc
  */
 function update_RECOMPUTE() {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     var i, obj, grid, meta, objAABB, newObjHash;
 
     // for each object
@@ -76,10 +72,6 @@ function getLongestAABBEdge(min, max) {
 // ---------------------------------------------------------------------
 
 function HSHG() {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     this.MAX_OBJECT_CELL_DENSITY = 1 / 8; // objects / cells
     this.INITIAL_GRID_LENGTH = 256; // 16x16
     this.HIERARCHY_FACTOR = 2;
@@ -192,30 +184,12 @@ HSHG.prototype.update = function () {
 };
 
 HSHG.prototype.queryForCollisionPairs = function (broadOverlapTestCallback) {
-<<<<<<< HEAD
     var i,
         j,
         k,
         grid,
         cell,
         objA,
-=======
-
-    var i,
-        j,
-        k,
-        l,
-        c,
-        grid,
-        cell,
-        objA,
-        objB,
-        offset,
-        adjacentCell,
-        biggerGrid,
-        objAAABB,
-        objAHashInBiggerGrid,
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         possibleCollisions = [];
 
     // default broad test to internal aabb overlap test
@@ -229,7 +203,6 @@ HSHG.prototype.queryForCollisionPairs = function (broadOverlapTestCallback) {
         for (j = 0; j < grid.occupiedCells.length; j++) {
             cell = grid.occupiedCells[j];
 
-<<<<<<< HEAD
             for (k = 0; k < cell.objectContainer.length; k++) {
                 objA = cell.objectContainer[k];
                 possibleCollisions = possibleCollisions.concat(this.testAdjacentCells(objA, k, broadOverlapTest));
@@ -347,77 +320,10 @@ HSHG.prototype.testAdjacentCells = function (objA, cellIndex, broadOverlapTest) 
             var objB = adjacentCell.objectContainer[l];
             if (broadOverlapTest(objA, objB) === true) {
                 possibleCollisions.push([objA, objB]);
-=======
-            // collide all objects within the occupied cell
-            for (k = 0; k < cell.objectContainer.length; k++) {
-                objA = cell.objectContainer[k];
-                for (l = k + 1; l < cell.objectContainer.length; l++) {
-                    objB = cell.objectContainer[l];
-                    if (broadOverlapTest(objA, objB) === true) {
-                        possibleCollisions.push([objA, objB]);
-                    }
-                }
-            }
-
-            // for the first half of all adjacent cells (offset 4 is the current cell)
-            for (c = 0; c < 4; c++) {
-                offset = cell.neighborOffsetArray[c];
-
-                // if(offset === null) { continue; }
-
-                adjacentCell = grid.allCells[cell.allCellsIndex + offset];
-
-                // collide all objects in cell with adjacent cell
-                for (k = 0; k < cell.objectContainer.length; k++) {
-                    objA = cell.objectContainer[k];
-                    for (l = 0; l < adjacentCell.objectContainer.length; l++) {
-                        objB = adjacentCell.objectContainer[l];
-                        if (broadOverlapTest(objA, objB) === true) {
-                            possibleCollisions.push([objA, objB]);
-                        }
-                    }
-                }
-            }
-        }
-
-        // forall objects that are stored in this grid
-        for (j = 0; j < grid.allObjects.length; j++) {
-            objA = grid.allObjects[j];
-            objAAABB = objA.getAABB();
-
-            // for all grids with cellsize larger than grid
-            for (k = i + 1; k < this._grids.length; k++) {
-                biggerGrid = this._grids[k];
-                objAHashInBiggerGrid = biggerGrid.toHash(objAAABB.min[0], objAAABB.min[1]);
-                cell = biggerGrid.allCells[objAHashInBiggerGrid];
-
-                // check objA against every object in all cells in offset array of cell
-                // for all adjacent cells...
-                for (c = 0; c < cell.neighborOffsetArray.length; c++) {
-                    offset = cell.neighborOffsetArray[c];
-
-                    // if(offset === null) { continue; }
-
-                    adjacentCell = biggerGrid.allCells[cell.allCellsIndex + offset];
-
-                    // for all objects in the adjacent cell...
-                    for (l = 0; l < adjacentCell.objectContainer.length; l++) {
-                        objB = adjacentCell.objectContainer[l];
-                        // test against object A
-                        if (broadOverlapTest(objA, objB) === true) {
-                            possibleCollisions.push([objA, objB]);
-                        }
-                    }
-                }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             }
         }
     }
 
-<<<<<<< HEAD
-=======
-    // return list of object pairs
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     return possibleCollisions;
 };
 
@@ -447,10 +353,6 @@ function Grid(cellSize, cellCount, parentHierarchy) {
 }
 
 Grid.prototype.initCells = function () {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     // TODO: inner/unique offset rows 0 and 2 may need to be
     // swapped due to +y being "down" vs "up"
 
@@ -483,10 +385,6 @@ Grid.prototype.initCells = function () {
     // init all cells, creating offset arrays as needed
 
     for (i = 0; i < gridLength; i++) {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         cell = new Cell();
         // compute row (y) and column (x) for an index
         y = ~~(i / this.rowColumnCount);
@@ -514,10 +412,6 @@ Grid.prototype.initCells = function () {
 
         // if cell is edge cell, use unique offsets, otherwise use inner offsets
         if (isOnRightEdge || isOnLeftEdge || isOnTopEdge || isOnBottomEdge) {
-<<<<<<< HEAD
-=======
-
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             // figure out cardinal offsets first
             rightOffset = isOnRightEdge === true ? -wh + 1 : 1;
             leftOffset = isOnLeftEdge === true ? wh - 1 : -1;

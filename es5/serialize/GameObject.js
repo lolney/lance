@@ -12,15 +12,9 @@ var _Serializable2 = require('./Serializable');
 
 var _Serializable3 = _interopRequireDefault(_Serializable2);
 
-<<<<<<< HEAD
-var _Serializer = require('./Serializer');
-
-var _Serializer2 = _interopRequireDefault(_Serializer);
-=======
 var _BaseTypes = require('./BaseTypes');
 
 var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44,11 +38,7 @@ var GameObject = function (_Serializable) {
         key: 'netScheme',
         get: function get() {
             return {
-<<<<<<< HEAD
-                id: { type: _Serializer2.default.TYPES.INT32 }
-=======
                 id: { type: _BaseTypes2.default.TYPES.INT32 }
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             };
         }
 
@@ -141,8 +131,6 @@ var GameObject = function (_Serializable) {
             this.savedCopy = new this.constructor(this.gameEngine, { id: null });
             this.savedCopy.syncTo(other ? other : this);
         }
-<<<<<<< HEAD
-=======
         /**
          * Bending is defined as the amount of error correction that will be applied
          * on the client side to a given object's physical attributes, incrementally,
@@ -174,17 +162,10 @@ var GameObject = function (_Serializable) {
     }, {
         key: 'bendToCurrentState',
 
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
         // TODO:
         // rather than pass worldSettings on each bend, they could
         // be passed in on the constructor just once.
-<<<<<<< HEAD
-
-    }, {
-        key: 'bendToCurrentState',
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         value: function bendToCurrentState(bending, worldSettings, isLocal, bendingIncrements) {
             if (this.savedCopy) {
                 this.bendToCurrent(this.savedCopy, bending, worldSettings, isLocal, bendingIncrements);
@@ -196,36 +177,12 @@ var GameObject = function (_Serializable) {
         value: function bendToCurrent(original, bending, worldSettings, isLocal, bendingIncrements) {}
 
         /**
-<<<<<<< HEAD
-        * The bending multiple is a getter, which returns the
-        * amount of bending.
-        * Bending is defined as the amount of correction that will be applied
-        * on the client side to a given object's position, incrementally, until the next
-        * server broadcast is expected to arrive.
-        * When this value is 0.0, the client ignores the server object's position.
-        * When this value is null, the bending is taken from the synchronization
-        * defaults.  Set this to zero for objects whose position
-        * jumps suddenly - because the game intended a jump, not a gradual bend.
-        * @memberof GameObject
-        * @member {Number} bendingMultiple
-        */
-
-    }, {
-        key: 'syncTo',
-
-
-        /**
-         * synchronize this object to the state of an other object
-         * @param {GameObject} other the other object to synchronize to
-         */
-=======
          * synchronize this object to the state of an other object
          * @param {GameObject} other the other object to synchronize to
          */
 
     }, {
         key: 'syncTo',
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         value: function syncTo(other) {
             _get(GameObject.prototype.__proto__ || Object.getPrototypeOf(GameObject.prototype), 'syncTo', this).call(this, other);
         }
@@ -293,24 +250,6 @@ var GameObject = function (_Serializable) {
             return this.components[componentClass.name];
         }
     }, {
-<<<<<<< HEAD
-        key: 'bendingMultiple',
-        get: function get() {
-            return null;
-        }
-
-        /**
-        * The velocity bending multiple is a getter, which returns the
-        * amount of velocity bending.
-        * @memberof GameObject
-        * @member {Number} bendingVelocityMultiple
-        */
-
-    }, {
-        key: 'bendingVelocityMultiple',
-        get: function get() {
-            return null;
-=======
         key: 'bending',
         get: function get() {
             return {
@@ -319,7 +258,6 @@ var GameObject = function (_Serializable) {
                 angularVelocity: { percent: 0.0 },
                 angleLocal: { percent: 1.0 }
             };
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
     }]);
 

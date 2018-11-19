@@ -66,15 +66,6 @@ var GameWorld = function () {
                 var conditions = [];
 
                 // object id condition
-<<<<<<< HEAD
-                conditions.push(!('id' in query) || query.id && object.id === query.id);
-
-                // player id condition
-                conditions.push(!('playerId' in query) || query.playerId && object.playerId === query.playerId);
-
-                // instance type conditio
-                conditions.push(!('instanceType' in query) || query.instanceType && object instanceof query.instanceType);
-=======
                 conditions.push(!('id' in query) || query.id !== null && object.id === query.id);
 
                 // player id condition
@@ -82,7 +73,6 @@ var GameWorld = function () {
 
                 // instance type conditio
                 conditions.push(!('instanceType' in query) || query.instanceType !== null && object instanceof query.instanceType);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
                 // components conditions
                 if ('components' in query) {
@@ -124,13 +114,8 @@ var GameWorld = function () {
         }
 
         /**
-<<<<<<< HEAD
-         * Remove an object from the game world
-         * @param object
-=======
          * Add an object to the game world
          * @param {Object} object object to add
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          */
 
     }, {
@@ -140,13 +125,8 @@ var GameWorld = function () {
         }
 
         /**
-<<<<<<< HEAD
-         * Add an object to the game world
-         * @param id
-=======
          * Remove an object from the game world
          * @param {number} id id of the object to remove
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          */
 
     }, {

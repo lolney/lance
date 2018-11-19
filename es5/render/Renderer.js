@@ -72,10 +72,7 @@ var Renderer = function () {
             if (typeof window === 'undefined' || !document) {
                 console.log('renderer invoked on server side.');
             }
-<<<<<<< HEAD
-=======
             this.gameEngine.emit('client__rendererReady');
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             return Promise.resolve(); // eslint-disable-line new-cap
         }
     }, {
@@ -91,23 +88,15 @@ var Renderer = function () {
          * method must call the clientEngine's step method.
          *
          * @param {Number} t - current time (only required in render-schedule mode)
-<<<<<<< HEAD
-         * @param {Number} dt - time elapsed since last draw (only required in render-schedule mode)
-=======
          * @param {Number} dt - time elapsed since last draw
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          */
 
     }, {
         key: 'draw',
         value: function draw(t, dt) {
-<<<<<<< HEAD
-            if (this.clientEngine.options.scheduler === 'render-schedule') this.runClientStep(t, dt);
-=======
             this.gameEngine.emit('client__draw');
 
             if (this.clientEngine.options.scheduler === 'render-schedule') this.runClientStep(t);
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
 
         /**
@@ -120,14 +109,9 @@ var Renderer = function () {
 
     }, {
         key: 'runClientStep',
-<<<<<<< HEAD
-        value: function runClientStep(t, dt) {
-            var p = this.clientEngine.options.stepPeriod;
-=======
         value: function runClientStep(t) {
             var p = this.clientEngine.options.stepPeriod;
             var dt = 0;
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
             // reset step time if we passed a threshold
             if (this.doReset || t > this.clientEngine.lastStepTime + TIME_RESET_THRESHOLD) {
@@ -143,11 +127,7 @@ var Renderer = function () {
                 this.clientEngine.correction = 0;
             }
 
-<<<<<<< HEAD
-            // if not ready for a real step yet, retun
-=======
             // if not ready for a real step yet, return
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             // this might happen after catch up above
             if (t < this.clientEngine.lastStepTime) {
                 dt = t - this.clientEngine.lastStepTime + this.clientEngine.correction;
@@ -181,8 +161,6 @@ var Renderer = function () {
     }, {
         key: 'removeObject',
         value: function removeObject(obj) {}
-<<<<<<< HEAD
-=======
 
         /**
          * Called when clientEngine has stopped, time to clean up
@@ -191,7 +169,6 @@ var Renderer = function () {
     }, {
         key: 'stop',
         value: function stop() {}
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }]);
 
     return Renderer;

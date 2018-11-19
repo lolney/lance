@@ -32,38 +32,28 @@ var HSHGCollisionDetection = function () {
             this.grid = new _HSHG2.default();
             this.previousCollisionPairs = {};
             this.stepCollidingPairs = {};
-<<<<<<< HEAD
             this.objects = [];
             this.keyObjectDetection = options.keyObjectDetection;
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
             this.gameEngine.on('objectAdded', function (obj) {
                 // add the gameEngine obj the the spatial grid
                 _this.grid.addObject(obj);
-<<<<<<< HEAD
                 if (obj.isKeyObject) {
                     _this.objects.push(obj);
                 }
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             });
 
             this.gameEngine.on('objectDestroyed', function (obj) {
                 // add the gameEngine obj the the spatial grid
                 _this.grid.removeObject(obj);
-<<<<<<< HEAD
                 if (obj.isKeyObject) {
                     _this.objects.splice(_this.objects.indexOf(obj), 1);
                 }
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             });
         }
     }, {
         key: 'detect',
         value: function detect() {
-<<<<<<< HEAD
             var possibleCollisions = this.keyObjectDetection ? this.grid.queryForCollisionPairsWithObjs(this.objects) : this.grid.queryForCollisionPairs();
 
             this.grid.update();
@@ -73,12 +63,6 @@ var HSHGCollisionDetection = function () {
                     o1: currentValue[0],
                     o2: currentValue[1]
                 };
-=======
-            this.grid.update();
-            this.stepCollidingPairs = this.grid.queryForCollisionPairs().reduce(function (accumulator, currentValue, i) {
-                var pairId = getArrayPairId(currentValue);
-                accumulator[pairId] = { o1: currentValue[0], o2: currentValue[1] };
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 return accumulator;
             }, {});
 
@@ -112,10 +96,7 @@ var HSHGCollisionDetection = function () {
                 }
             }
 
-<<<<<<< HEAD
             var collisionObjects = [];
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -129,10 +110,7 @@ var HSHGCollisionDetection = function () {
                     // didn't exist in previous pairs, but exists now: this is a new colliding pair
                     if (_pairId in this.previousCollisionPairs === false) {
                         this.gameEngine.emit('collisionStart', _pairObj);
-<<<<<<< HEAD
                         collisionObjects.push(_pairObj);
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                     }
                 }
             } catch (err) {
@@ -151,10 +129,7 @@ var HSHGCollisionDetection = function () {
             }
 
             this.previousCollisionPairs = this.stepCollidingPairs;
-<<<<<<< HEAD
             return collisionObjects;
-=======
->>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
 
         /**

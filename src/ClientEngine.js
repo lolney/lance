@@ -208,7 +208,6 @@ class ClientEngine {
             }
         }).then(() => {
             return new Promise((resolve, reject) => {
-                this.resolveGame = resolve;
                 if (this.socket) {
                     this.socket.on('disconnect', () => {
                         if (!this.resolved && !this.stopped) {
@@ -219,6 +218,7 @@ class ClientEngine {
                         }
                     });
                 }
+                resolve(this.socket);
             });
         });
     }
