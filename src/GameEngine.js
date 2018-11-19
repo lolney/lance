@@ -148,6 +148,7 @@ class GameEngine {
         });
 
         this.emit('start', { timestamp: (new Date()).getTime() });
+    }
 
     stop() {
         this.removeAllListeners();

@@ -26,6 +26,7 @@ var LOOP_SLOW_COUNT = 10;
  */
 
 var Scheduler = function () {
+
     /**
      * schedule a function to be called
      *
@@ -74,11 +75,11 @@ var Scheduler = function () {
     }, {
         key: 'nextTick',
         value: function nextTick() {
-            if (this.stopped) {
-                return;
-            }
             var stepStartTime = new Date().getTime();
             if (stepStartTime > this.nextExecTime + this.options.period * LOOP_SLOW_THRESH) {
+                if (this.stopped) {
+                    return;
+                }
                 this.delayCounter++;
             } else this.delayCounter = 0;
 

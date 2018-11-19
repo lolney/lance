@@ -50,6 +50,7 @@
     "build": "babel src --out-dir es5",
     "test-all": "mocha test/EndToEnd/",
     "test-serializer": "mocha ./test/serializer/",
+    "test-physics": "mocha ./test/SimplePhysics/ --compilers js:babel-core/register",
     "test": "mocha ./test/serializer/ --compilers js:babel-core/register"
   },
   "devDependencies": {
