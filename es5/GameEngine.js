@@ -58,8 +58,11 @@ var GameEngine = function () {
     * @param {Number} options.delayInputCount - client side only.  Introduce an artificial delay on the client to better match the time it will occur on the server.  This value sets the number of steps the client will wait before applying the input locally
     */
   function GameEngine(options) {
+<<<<<<< HEAD
     var _this = this;
 
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     _classCallCheck(this, GameEngine);
 
     // TODO I think we should discuss this whole globals issues
@@ -91,10 +94,13 @@ var GameEngine = function () {
      * @param {String} eventName - name of the event
      * @param {Function} eventHandler - handler function
      */
+<<<<<<< HEAD
     this.on = function (event, listener) {
       eventEmitter.on(event, listener);
       _this.events.push([event, listener]);
     };
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     this.on = eventEmitter.on;
 
     /**
@@ -119,8 +125,11 @@ var GameEngine = function () {
      */
     this.removeListener = eventEmitter.removeListener;
 
+<<<<<<< HEAD
     this.removeAllListeners = eventEmitter.removeAllListeners;
 
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     this.emit = eventEmitter.emit;
 
     // set up trace
@@ -191,7 +200,11 @@ var GameEngine = function () {
   }, {
     key: 'start',
     value: function start() {
+<<<<<<< HEAD
       var _this2 = this;
+=======
+      var _this = this;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
       this.trace.info(function () {
         return '========== game engine started ==========';
@@ -202,16 +215,23 @@ var GameEngine = function () {
       this.timer = new _Timer2.default();
       this.timer.play();
       this.on('postStep', function (step, isReenact) {
+<<<<<<< HEAD
         if (!isReenact) _this2.timer.tick();
+=======
+        if (!isReenact) _this.timer.tick();
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
       });
 
       this.emit('start', { timestamp: new Date().getTime() });
     }
+<<<<<<< HEAD
   }, {
     key: 'stop',
     value: function stop() {
       this.removeAllListeners();
     }
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
     /**
       * Single game step.
@@ -225,7 +245,11 @@ var GameEngine = function () {
   }, {
     key: 'step',
     value: function step(isReenact, t, dt, physicsOnly) {
+<<<<<<< HEAD
       var _this3 = this;
+=======
+      var _this2 = this;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
       // physics-only step
       if (physicsOnly) {
@@ -248,7 +272,11 @@ var GameEngine = function () {
       }
 
       // physics step
+<<<<<<< HEAD
       if (this.physicsEngine) {
+=======
+      if (this.physicsEngine && !this.ignorePhysics) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         if (dt) dt /= 1000; // physics engines work in seconds
         this.physicsEngine.step(dt, objectFilter);
       }
@@ -258,7 +286,11 @@ var GameEngine = function () {
       // - refresh object positions after physics
       this.world.forEachObject(function (id, o) {
         if (typeof o.refreshFromPhysics === 'function') o.refreshFromPhysics();
+<<<<<<< HEAD
         _this3.trace.trace(function () {
+=======
+        _this2.trace.trace(function () {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
           return 'object[' + id + '] after ' + (isReenact ? 'reenact' : 'step') + ' : ' + o.toString();
         });
       });
@@ -393,6 +425,21 @@ var GameEngine = function () {
   }, {
     key: 'registerClasses',
     value: function registerClasses(serializer) {}
+<<<<<<< HEAD
+=======
+
+    /**
+     * Decide whether the player game is over by returning an Object, need to be implemented
+     *
+     * @return {Object} truthful if the game is over for the player and the object is returned as GameOver data
+     */
+
+  }, {
+    key: 'getPlayerGameOverResult',
+    value: function getPlayerGameOverResult() {
+      return null;
+    }
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
   }]);
 
   return GameEngine;

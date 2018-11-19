@@ -6,8 +6,15 @@ export default class SyncStrategy {
         this.clientEngine = clientEngine;
         this.gameEngine = clientEngine.gameEngine;
         this.options = Object.assign({}, inputOptions);
+        this.gameEngine.on('client__postStep', this.syncStep.bind(this));
         this.gameEngine.on('client__syncReceived', this.collectSync.bind(this));
         this.requiredSyncs = [];
+        this.SYNC_APPLIED = 'SYNC_APPLIED';
+        this.STEP_DRIFT_THRESHOLDS = {
+            onServerSync: { MAX_LEAD: 1, MAX_LAG: 3 }, // max step lead/lag allowed after every server sync
+            onEveryStep: { MAX_LEAD: 7, MAX_LAG: 8 }, // max step lead/lag allowed at every step
+            clientReset: 20 // if we are behind this many steps, just reset the step counter
+        };
     }
 
     // collect a sync and its events
@@ -73,5 +80,51 @@ export default class SyncStrategy {
         let objCount = (Object.keys(lastSync.syncObjects)).length;
         let stepCount = (Object.keys(lastSync.syncSteps)).length;
         this.gameEngine.trace.debug(() => `sync contains ${objCount} objects ${eventCount} events ${stepCount} steps`);
+    }
+
+    // add an object to our world
+    addNewObject(objId, newObj, options) {
+
+        let curObj = new newObj.constructor(this.gameEngine, {
+            id: objId
+        });
+        curObj.syncTo(newObj);
+        this.gameEngine.addObjectToWorld(curObj);
+        if (this.clientEngine.options.verbose)
+            console.log(`adding new object ${curObj}`);
+
+        return curObj;
+    }
+
+    // sync to step, by applying bending, and applying the latest sync
+    syncStep(stepDesc) {
+
+        // apply incremental bending
+        this.gameEngine.world.forEachObject((id, o) => {
+            if (typeof o.applyIncrementalBending === 'function') {
+                o.applyIncrementalBending(stepDesc);
+                o.refreshToPhysics();
+            }
+        });
+
+        // apply all pending required syncs
+        while (this.requiredSyncs.length) {
+
+            let requiredStep = this.requiredSyncs[0].stepCount;
+
+            // if we haven't reached the corresponding step, it's too soon to apply syncs
+            if (requiredStep > this.gameEngine.world.stepCount)
+                return;
+
+            this.gameEngine.trace.trace(() => `applying a required sync ${requiredStep}`);
+            this.applySync(this.requiredSyncs.shift(), true);
+        }
+
+        // apply the sync and delete it on success
+        if (this.lastSync) {
+            let rc = this.applySync(this.lastSync, false);
+            if (rc === this.SYNC_APPLIED)
+                this.lastSync = null;
+        }
     }
 }

@@ -63,7 +63,11 @@ var ServerEngine = function () {
      * @param {Number} options.updateRate - number of steps in each update (sync)
      * @param {String} options.tracesPath - path where traces should go
      * @param {Boolean} options.updateOnObjectCreation - should send update immediately when new object is created
+<<<<<<< HEAD
      * @param {Number} options.timeoutInterval=40 - number of seconds after which a player is automatically disconnected if no input is received. Set to 0 for no timeout
+=======
+     * @param {Number} options.timeoutInterval=180 - number of seconds after which a player is automatically disconnected if no input is received. Set to 0 for no timeout
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
      * @return {ServerEngine} serverEngine - self
      */
     function ServerEngine(io, gameEngine, options) {
@@ -72,7 +76,11 @@ var ServerEngine = function () {
         this.options = Object.assign({
             updateRate: 6,
             stepRate: 60,
+<<<<<<< HEAD
             timeoutInterval: 40,
+=======
+            timeoutInterval: 180,
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             updateOnObjectCreation: true,
             tracesPath: '',
             debug: {
@@ -412,8 +420,13 @@ var ServerEngine = function () {
             if (!playerId) {
                 playerId = ++this.gameEngine.world.playerCount;
             }
+<<<<<<< HEAD
 
             socket.playerId = playerId;
+=======
+            socket.playerId = playerId;
+
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             socket.lastHandledInput = null;
             socket.joinTime = new Date().getTime();
             this.resetIdleTimeout(socket);

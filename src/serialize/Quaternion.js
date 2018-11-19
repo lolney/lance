@@ -1,6 +1,9 @@
 import Serializable from './Serializable';
-import Serializer from './Serializer';
+import BaseTypes from './BaseTypes';
 import ThreeVector from './ThreeVector';
+
+const SHOW_AS_AXIS_ANGLE = true;
+const MAX_DEL_THETA = 0.2;
 
 /**
  * A Quaternion is a geometric object which can be used to
@@ -10,10 +13,10 @@ class Quaternion extends Serializable {
 
     static get netScheme() {
         return {
-            w: { type: Serializer.TYPES.FLOAT32 },
-            x: { type: Serializer.TYPES.FLOAT32 },
-            y: { type: Serializer.TYPES.FLOAT32 },
-            z: { type: Serializer.TYPES.FLOAT32 }
+            w: { type: BaseTypes.TYPES.FLOAT32 },
+            x: { type: BaseTypes.TYPES.FLOAT32 },
+            y: { type: BaseTypes.TYPES.FLOAT32 },
+            z: { type: BaseTypes.TYPES.FLOAT32 }
         };
     }
 
@@ -41,7 +44,11 @@ class Quaternion extends Serializable {
      */
     toString() {
         function round3(x) { return Math.round(x * 1000) / 1000; }
-        return `quaternion(${round3(this.w)}, ${round3(this.x)}, ${round3(this.y)}, ${round3(this.z)})`;
+        if (SHOW_AS_AXIS_ANGLE) {
+            let axisAngle = this.toAxisAngle();
+            return `[${round3(axisAngle.angle)},${axisAngle.axis.toString()}]`;
+        }
+        return `[${round3(this.w)}, ${round3(this.x)}, ${round3(this.y)}, ${round3(this.z)}]`;
     }
 
     /**
@@ -82,6 +89,7 @@ class Quaternion extends Serializable {
 
         // assuming quaternion normalised then w is less than 1, so term always positive.
         let axis = new ThreeVector(1, 0, 0);
+        this.normalize();
         let angle = 2 * Math.acos(this.w);
         let s = Math.sqrt(1 - this.w * this.w);
         if (s > 0.001) {
@@ -90,7 +98,28 @@ class Quaternion extends Serializable {
             axis.y = this.y * divS;
             axis.z = this.z * divS;
         }
+        if (s > Math.PI) {
+            s -= 2 * Math.PI;
+        }
         return { axis, angle };
+    }
+
+    normalize() {
+        let l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        if (l === 0) {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            this.w = 0;
+        } else {
+            l = 1 / l;
+            this.x *= l;
+            this.y *= l;
+            this.z *= l;
+            this.w *= l;
+        }
+
+        return this;
     }
 
     /**
@@ -102,6 +131,8 @@ class Quaternion extends Serializable {
      */
     setFromAxisAngle(axis, angle) {
 
+        if (angle < 0)
+            angle += Math.PI * 2;
         let halfAngle = angle * 0.5;
         let s = Math.sin(halfAngle);
         this.x = axis.x * s;
@@ -154,6 +185,10 @@ class Quaternion extends Serializable {
      * @return {Quaternion} returns self
      */
     slerp(target, bending) {
+
+        if (bending <= 0) return this;
+        if (bending >= 1) return this.copy(target);
+
         let aw = this.w, ax = this.x, ay = this.y, az = this.z;
         let bw = target.w, bx = target.x, by = target.y, bz = target.z;
 
@@ -170,18 +205,20 @@ class Quaternion extends Serializable {
             return this;
         }
 
-        let sinHalfTheta = Math.sqrt(1.0 - cosHalfTheta*cosHalfTheta);
-        if (Math.abs(sinHalfTheta) < 0.001) {
-            this.set(0.5*(aw + this.w),
-                0.5*(ax + this.x),
-                0.5*(ay + this.y),
-                0.5*(az + this.z));
-            return this;
+        let sqrSinHalfTheta = 1.0 - cosHalfTheta*cosHalfTheta;
+        if (sqrSinHalfTheta < Number.EPSILON) {
+            let s = 1 - t;
+            this.set(s*w + bending*this.w, s*x + bending*this.x, s*y + bending*this.y, s*z + bending*this.z);
+            return this.normalize();
         }
 
+        let sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
         let halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
-        let ratioA = Math.sin((1-bending)*halfTheta)/sinHalfTheta;
-        let ratioB = Math.sin(bending*halfTheta)/sinHalfTheta;
+        let delTheta = bending * halfTheta;
+        if (Math.abs(delTheta) > MAX_DEL_THETA)
+            delTheta = MAX_DEL_THETA * Math.sign(delTheta);
+        let ratioA = Math.sin(halfTheta - delTheta)/sinHalfTheta;
+        let ratioB = Math.sin(delTheta)/sinHalfTheta;
         this.set(aw*ratioA + this.w*ratioB,
             ax*ratioA + this.x*ratioB,
             ay*ratioA + this.y*ratioB,

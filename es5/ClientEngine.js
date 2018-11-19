@@ -38,6 +38,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+<<<<<<< HEAD
 // externalizing these parameters as options would add confusion to game
 // developers, and provide no real benefit.
 var STEP_DRIFT_THRESHOLDS = {
@@ -45,6 +46,8 @@ var STEP_DRIFT_THRESHOLDS = {
     onEveryStep: { MAX_LEAD: 7, MAX_LAG: 8 // max step lead/lag allowed at every step
     } };
 var STEP_DRIFT_THRESHOLD__CLIENT_RESET = 20; // if we are behind this many steps, just reset the step counter
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 var GAME_UPS = 60; // default number of game steps per second
 var STEP_DELAY_MSEC = 12; // if forward drift detected, delay next execution by this amount
 var STEP_HURRY_MSEC = 8; // if backward drift detected, hurry next execution by this amount
@@ -63,6 +66,10 @@ var ClientEngine = function () {
       *
       * @param {GameEngine} gameEngine - a game engine
       * @param {Object} inputOptions - options object
+<<<<<<< HEAD
+=======
+      * @param {Boolean} inputOptions.verbose - print logs to console
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
       * @param {Boolean} inputOptions.autoConnect - if true, the client will automatically attempt connect to server.
       * @param {Boolean} inputOptions.standaloneMode - if true, the client will never try to connect to a server
       * @param {Number} inputOptions.delayInputCount - if set, inputs will be delayed by this many steps before they are actually applied on the client.
@@ -73,6 +80,10 @@ var ClientEngine = function () {
       * @param {String} inputOptions.syncOptions.sync - chosen sync option, can be interpolate, extrapolate, or frameSync
       * @param {Number} inputOptions.syncOptions.localObjBending - amount (0 to 1.0) of bending towards original client position, after each sync, for local objects
       * @param {Number} inputOptions.syncOptions.remoteObjBending - amount (0 to 1.0) of bending towards original client position, after each sync, for remote objects
+<<<<<<< HEAD
+=======
+      * @param {String} inputOptions.serverURL - Socket server url
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
       * @param {Renderer} Renderer - the Renderer class constructor
       */
     function ClientEngine(gameEngine, inputOptions, Renderer) {
@@ -83,7 +94,12 @@ var ClientEngine = function () {
             healthCheckInterval: 1000,
             healthCheckRTTSample: 10,
             stepPeriod: 1000 / GAME_UPS,
+<<<<<<< HEAD
             scheduler: 'render-schedule'
+=======
+            scheduler: 'render-schedule',
+            serverURL: null
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }, inputOptions);
 
         /**
@@ -123,6 +139,11 @@ var ClientEngine = function () {
                 this.delayedInputs[i] = [];
             }
         }
+<<<<<<< HEAD
+=======
+
+        this.gameEngine.emit('client__init');
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }
 
     // configure the Synchronizer singleton
@@ -140,7 +161,11 @@ var ClientEngine = function () {
                 syncOptions.reflect = true;
             }
 
+<<<<<<< HEAD
             var synchronizer = new _Synchronizer2.default(this, syncOptions);
+=======
+            this.synchronizer = new _Synchronizer2.default(this, syncOptions);
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
 
         /**
@@ -163,14 +188,21 @@ var ClientEngine = function () {
             var connectSocket = function connectSocket(matchMakerAnswer) {
                 return new Promise(function (resolve, reject) {
 
+<<<<<<< HEAD
                     if (matchMakerAnswer.status !== 'ok') reject();
 
                     console.log('connecting to game server ' + matchMakerAnswer.serverURL);
+=======
+                    if (matchMakerAnswer.status !== 'ok') reject('matchMaker failed status: ' + matchMakerAnswer.status);
+
+                    if (_this.options.verbose) console.log('connecting to game server ' + matchMakerAnswer.serverURL);
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                     _this.socket = (0, _socket2.default)(matchMakerAnswer.serverURL, options);
 
                     _this.networkMonitor.registerClient(_this);
 
                     _this.socket.once('connect', function () {
+<<<<<<< HEAD
                         if (_this.options.auth) {
                             _this.socket.emit('authentication', {
                                 username: _this.options.auth.username,
@@ -183,6 +215,14 @@ var ClientEngine = function () {
                         } else {
                             resolve();
                         }
+=======
+                        if (_this.options.verbose) console.log('connection made');
+                        resolve();
+                    });
+
+                    _this.socket.once('error', function (error) {
+                        reject(error);
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                     });
 
                     _this.socket.on('playerJoined', function (playerData) {
@@ -214,10 +254,22 @@ var ClientEngine = function () {
         value: function start() {
             var _this2 = this;
 
+<<<<<<< HEAD
+=======
+            this.stopped = false;
+            this.resolved = false;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             // initialize the renderer
             // the render loop waits for next animation frame
             if (!this.renderer) alert('ERROR: game has not defined a renderer');
             var renderLoop = function renderLoop(timestamp) {
+<<<<<<< HEAD
+=======
+                if (_this2.stopped) {
+                    _this2.renderer.stop();
+                    return;
+                }
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 _this2.lastTimestamp = _this2.lastTimestamp || timestamp;
                 _this2.renderer.draw(timestamp, timestamp - _this2.lastTimestamp);
                 _this2.lastTimestamp = timestamp;
@@ -239,11 +291,48 @@ var ClientEngine = function () {
 
                 if (typeof window !== 'undefined') window.requestAnimationFrame(renderLoop);
                 if (_this2.options.autoConnect && _this2.options.standaloneMode !== true) {
+<<<<<<< HEAD
                     _this2.connect();
                 }
             });
         }
 
+=======
+                    return _this2.connect().catch(function (error) {
+                        _this2.stopped = true;
+                        throw error;
+                    });
+                }
+            }).then(function () {
+                return new Promise(function (resolve, reject) {
+                    _this2.resolveGame = resolve;
+                    if (_this2.socket) {
+                        _this2.socket.on('disconnect', function () {
+                            if (!_this2.resolved && !_this2.stopped) {
+                                if (_this2.options.verbose) console.log('disconnected by server...');
+                                _this2.stopped = true;
+                                reject();
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        /**
+         * Disconnect from game server
+         */
+
+    }, {
+        key: 'disconnect',
+        value: function disconnect() {
+            if (!this.stopped) {
+                this.socket.disconnect();
+                this.stopped = true;
+            }
+        }
+
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         // check if client step is too far ahead (leading) or too far
         // behing (lagging) the server step
 
@@ -251,12 +340,22 @@ var ClientEngine = function () {
         key: 'checkDrift',
         value: function checkDrift(checkType) {
 
+<<<<<<< HEAD
             if (!this.gameEngine.serverStep) return;
 
             var maxLead = STEP_DRIFT_THRESHOLDS[checkType].MAX_LEAD;
             var maxLag = STEP_DRIFT_THRESHOLDS[checkType].MAX_LAG;
             var clientStep = this.gameEngine.world.stepCount;
             var serverStep = this.gameEngine.serverStep;
+=======
+            if (!this.gameEngine.highestServerStep) return;
+
+            var thresholds = this.synchronizer.syncStrategy.STEP_DRIFT_THRESHOLDS;
+            var maxLead = thresholds[checkType].MAX_LEAD;
+            var maxLag = thresholds[checkType].MAX_LAG;
+            var clientStep = this.gameEngine.world.stepCount;
+            var serverStep = this.gameEngine.highestServerStep;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             if (clientStep > serverStep + maxLead) {
                 this.gameEngine.trace.warn(function () {
                     return 'step drift ' + checkType + '. [' + clientStep + ' > ' + serverStep + ' + ' + maxLead + '] Client is ahead of server.  Delaying next step.';
@@ -281,6 +380,19 @@ var ClientEngine = function () {
         key: 'step',
         value: function step(t, dt, physicsOnly) {
 
+<<<<<<< HEAD
+=======
+            if (!this.resolved) {
+                var result = this.gameEngine.getPlayerGameOverResult();
+                if (result) {
+                    this.resolved = true;
+                    this.resolveGame(result);
+                    // simulation can continue...
+                    // call disconnect to quit
+                }
+            }
+
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             // physics only case
             if (physicsOnly) {
                 this.gameEngine.step(false, t, dt, physicsOnly);
@@ -324,7 +436,13 @@ var ClientEngine = function () {
     }, {
         key: 'doInputLocal',
         value: function doInputLocal(message) {
+<<<<<<< HEAD
             if (this.gameEngine.passive) {
+=======
+
+            // some synchronization strategies (interpolate) ignore inputs on client side
+            if (this.gameEngine.ignoreInputs) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 return;
             }
 
@@ -411,7 +529,11 @@ var ClientEngine = function () {
             });
 
             // emit that a snapshot has been received
+<<<<<<< HEAD
             this.gameEngine.serverStep = syncHeader.stepCount;
+=======
+            if (!this.gameEngine.highestServerStep || syncHeader.stepCount > this.gameEngine.highestServerStep) this.gameEngine.highestServerStep = syncHeader.stepCount;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             this.gameEngine.emit('client__syncReceived', {
                 syncEvents: syncEvents,
                 stepCount: syncHeader.stepCount,
@@ -423,7 +545,11 @@ var ClientEngine = function () {
             });
 
             // finally update the stepCount
+<<<<<<< HEAD
             if (syncHeader.stepCount > this.gameEngine.world.stepCount + STEP_DRIFT_THRESHOLD__CLIENT_RESET) {
+=======
+            if (syncHeader.stepCount > this.gameEngine.world.stepCount + this.synchronizer.syncStrategy.STEP_DRIFT_THRESHOLDS.clientReset) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 this.gameEngine.trace.info(function () {
                     return '========== world step count updated from ' + _this4.gameEngine.world.stepCount + ' to  ' + syncHeader.stepCount + ' ==========';
                 });

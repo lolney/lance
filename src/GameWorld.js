@@ -48,13 +48,13 @@ class GameWorld {
             let conditions = [];
 
             // object id condition
-            conditions.push(!('id' in query) || query.id && object.id === query.id);
+            conditions.push(!('id' in query) || query.id !== null && object.id === query.id);
 
             // player id condition
-            conditions.push(!('playerId' in query) || query.playerId && object.playerId === query.playerId);
+            conditions.push(!('playerId' in query) || query.playerId !== null && object.playerId === query.playerId);
 
             // instance type conditio
-            conditions.push(!('instanceType' in query) || query.instanceType && object instanceof query.instanceType);
+            conditions.push(!('instanceType' in query) || query.instanceType !== null && object instanceof query.instanceType);
 
             // components conditions
             if ('components' in query) {
@@ -91,16 +91,16 @@ class GameWorld {
     }
 
     /**
-     * Remove an object from the game world
-     * @param object
+     * Add an object to the game world
+     * @param {Object} object object to add
      */
     addObject(object) {
         this.objects[object.id] = object;
     }
 
     /**
-     * Add an object to the game world
-     * @param id
+     * Remove an object from the game world
+     * @param {number} id id of the object to remove
      */
     removeObject(id) {
         delete this.objects[id];

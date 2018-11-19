@@ -1,5 +1,5 @@
 import Serializable from './Serializable';
-import Serializer from './Serializer';
+import BaseTypes from './BaseTypes';
 
 /**
  * A ThreeVector is a geometric object which is completely described
@@ -9,9 +9,9 @@ class ThreeVector extends Serializable {
 
     static get netScheme() {
         return {
-            x: { type: Serializer.TYPES.FLOAT32 },
-            y: { type: Serializer.TYPES.FLOAT32 },
-            z: { type: Serializer.TYPES.FLOAT32 }
+            x: { type: BaseTypes.TYPES.FLOAT32 },
+            y: { type: BaseTypes.TYPES.FLOAT32 },
+            z: { type: BaseTypes.TYPES.FLOAT32 }
         };
     }
 
@@ -37,7 +37,7 @@ class ThreeVector extends Serializable {
      */
     toString() {
         function round3(x) { return Math.round(x * 1000) / 1000; }
-        return `(${round3(this.x)}, ${round3(this.y)}, ${round3(this.z)})`;
+        return `[${round3(this.x)}, ${round3(this.y)}, ${round3(this.z)}]`;
     }
 
     /**
@@ -127,6 +127,15 @@ class ThreeVector extends Serializable {
     }
 
     /**
+     * Create a clone of this vector
+     *
+     * @return {ThreeVector} returns clone
+     */
+    clone() {
+        return new ThreeVector(this.x, this.y, this.z);
+    }
+
+    /**
      * Apply in-place lerp (linear interpolation) to this ThreeVector
      * towards another ThreeVector
      * @param {ThreeVector} target the target vector
@@ -138,6 +147,34 @@ class ThreeVector extends Serializable {
         this.y += (target.y - this.y) * p;
         this.z += (target.z - this.z) * p;
         return this;
+    }
+
+    /**
+     * Get bending Delta Vector
+     * towards another ThreeVector
+     * @param {ThreeVector} target the target vector
+     * @param {Object} options bending options
+     * @param {Number} options.increments number of increments
+     * @param {Number} options.percent The percentage to bend
+     * @param {Number} options.min No less than this value
+     * @param {Number} options.max No more than this value
+     * @return {ThreeVector} returns new Incremental Vector
+     */
+    getBendingDelta(target, options) {
+        let increment = target.clone();
+        increment.subtract(this);
+        increment.multiplyScalar(options.percent);
+
+        // check for max case
+        if ((options.max && increment.length() > options.max) ||
+            (options.max && increment.length() < options.min)) {
+            return new ThreeVector(0, 0, 0);
+        }
+
+        // divide into increments
+        increment.multiplyScalar(1 / options.increments);
+
+        return increment;
     }
 }
 

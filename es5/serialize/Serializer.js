@@ -22,6 +22,13 @@ var _Quaternion = require('./Quaternion');
 
 var _Quaternion2 = _interopRequireDefault(_Quaternion);
 
+<<<<<<< HEAD
+=======
+var _BaseTypes = require('./BaseTypes');
+
+var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
+
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33,7 +40,10 @@ var MAX_UINT_16 = 0xFFFF;
  * objects on the server, before they are sent to each client.  On the client side the
  * Serializer deserializes these objects.
  *
+<<<<<<< HEAD
  * The Serializer defines the data types which can be serialized.
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
  */
 
 var Serializer = function () {
@@ -138,6 +148,7 @@ var Serializer = function () {
     }, {
         key: 'writeDataView',
         value: function writeDataView(dataView, value, bufferOffset, netSchemProp) {
+<<<<<<< HEAD
             if (netSchemProp.type == Serializer.TYPES.FLOAT32) {
                 dataView.setFloat32(bufferOffset, value);
             } else if (netSchemProp.type == Serializer.TYPES.INT32) {
@@ -149,6 +160,19 @@ var Serializer = function () {
             } else if (netSchemProp.type == Serializer.TYPES.UINT8) {
                 dataView.setUint8(bufferOffset, value);
             } else if (netSchemProp.type == Serializer.TYPES.STRING) {
+=======
+            if (netSchemProp.type == _BaseTypes2.default.TYPES.FLOAT32) {
+                dataView.setFloat32(bufferOffset, value);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.INT32) {
+                dataView.setInt32(bufferOffset, value);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.INT16) {
+                dataView.setInt16(bufferOffset, value);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.INT8) {
+                dataView.setInt8(bufferOffset, value);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.UINT8) {
+                dataView.setUint8(bufferOffset, value);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.STRING) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
                 //   MAX_UINT_16 is a reserved (length) value which indicates string hasn't changed
                 if (value === null) {
@@ -161,12 +185,20 @@ var Serializer = function () {
                         dataView.setUint16(bufferOffset + localBufferOffset + i * 2, value.charCodeAt(i));
                     }
                 }
+<<<<<<< HEAD
             } else if (netSchemProp.type == Serializer.TYPES.CLASSINSTANCE) {
+=======
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.CLASSINSTANCE) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 value.serialize(this, {
                     dataBuffer: dataView.buffer,
                     bufferOffset: bufferOffset
                 });
+<<<<<<< HEAD
             } else if (netSchemProp.type == Serializer.TYPES.LIST) {
+=======
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.LIST) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 var _localBufferOffset = 0;
 
                 // a list is comprised of the number of items followed by the items
@@ -182,7 +214,11 @@ var Serializer = function () {
                         var item = _step2.value;
 
                         // TODO: inelegant, currently doesn't support list of lists
+<<<<<<< HEAD
                         if (netSchemProp.itemType == Serializer.TYPES.CLASSINSTANCE) {
+=======
+                        if (netSchemProp.itemType == _BaseTypes2.default.TYPES.CLASSINSTANCE) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                             var serializedObj = item.serialize(this, {
                                 dataBuffer: dataView.buffer,
                                 bufferOffset: bufferOffset + _localBufferOffset
@@ -220,6 +256,7 @@ var Serializer = function () {
             var data = void 0,
                 bufferSize = void 0;
 
+<<<<<<< HEAD
             if (netSchemProp.type == Serializer.TYPES.FLOAT32) {
                 data = dataView.getFloat32(bufferOffset);
                 bufferSize = this.getTypeByteSize(netSchemProp.type);
@@ -236,6 +273,24 @@ var Serializer = function () {
                 data = dataView.getUint8(bufferOffset);
                 bufferSize = this.getTypeByteSize(netSchemProp.type);
             } else if (netSchemProp.type == Serializer.TYPES.STRING) {
+=======
+            if (netSchemProp.type == _BaseTypes2.default.TYPES.FLOAT32) {
+                data = dataView.getFloat32(bufferOffset);
+                bufferSize = this.getTypeByteSize(netSchemProp.type);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.INT32) {
+                data = dataView.getInt32(bufferOffset);
+                bufferSize = this.getTypeByteSize(netSchemProp.type);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.INT16) {
+                data = dataView.getInt16(bufferOffset);
+                bufferSize = this.getTypeByteSize(netSchemProp.type);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.INT8) {
+                data = dataView.getInt8(bufferOffset);
+                bufferSize = this.getTypeByteSize(netSchemProp.type);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.UINT8) {
+                data = dataView.getUint8(bufferOffset);
+                bufferSize = this.getTypeByteSize(netSchemProp.type);
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.STRING) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 var length = dataView.getUint16(bufferOffset);
                 var localBufferOffset = Uint16Array.BYTES_PER_ELEMENT;
                 bufferSize = localBufferOffset;
@@ -248,11 +303,19 @@ var Serializer = function () {
                     }data = String.fromCharCode.apply(null, a);
                     bufferSize += length * Uint16Array.BYTES_PER_ELEMENT;
                 }
+<<<<<<< HEAD
             } else if (netSchemProp.type == Serializer.TYPES.CLASSINSTANCE) {
                 var deserializeData = this.deserialize(dataView.buffer, bufferOffset);
                 data = deserializeData.obj;
                 bufferSize = deserializeData.byteOffset;
             } else if (netSchemProp.type == Serializer.TYPES.LIST) {
+=======
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.CLASSINSTANCE) {
+                var deserializeData = this.deserialize(dataView.buffer, bufferOffset);
+                data = deserializeData.obj;
+                bufferSize = deserializeData.byteOffset;
+            } else if (netSchemProp.type == _BaseTypes2.default.TYPES.LIST) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 var _localBufferOffset2 = 0;
 
                 var items = [];
@@ -282,6 +345,7 @@ var Serializer = function () {
         value: function getTypeByteSize(type) {
 
             switch (type) {
+<<<<<<< HEAD
                 case Serializer.TYPES.FLOAT32:
                     {
                         return Float32Array.BYTES_PER_ELEMENT;
@@ -299,6 +363,25 @@ var Serializer = function () {
                         return Int8Array.BYTES_PER_ELEMENT;
                     }
                 case Serializer.TYPES.UINT8:
+=======
+                case _BaseTypes2.default.TYPES.FLOAT32:
+                    {
+                        return Float32Array.BYTES_PER_ELEMENT;
+                    }
+                case _BaseTypes2.default.TYPES.INT32:
+                    {
+                        return Int32Array.BYTES_PER_ELEMENT;
+                    }
+                case _BaseTypes2.default.TYPES.INT16:
+                    {
+                        return Int16Array.BYTES_PER_ELEMENT;
+                    }
+                case _BaseTypes2.default.TYPES.INT8:
+                    {
+                        return Int8Array.BYTES_PER_ELEMENT;
+                    }
+                case _BaseTypes2.default.TYPES.UINT8:
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                     {
                         return Uint8Array.BYTES_PER_ELEMENT;
                     }
@@ -319,13 +402,18 @@ var Serializer = function () {
     }], [{
         key: 'typeCanAssign',
         value: function typeCanAssign(type) {
+<<<<<<< HEAD
             return type !== Serializer.TYPES.CLASSINSTANCE && type !== Serializer.TYPES.LIST;
+=======
+            return type !== _BaseTypes2.default.TYPES.CLASSINSTANCE && type !== _BaseTypes2.default.TYPES.LIST;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
     }]);
 
     return Serializer;
 }();
 
+<<<<<<< HEAD
 /**
 * The TYPES object defines the supported serialization types
 * @constant
@@ -343,4 +431,6 @@ Serializer.TYPES = {
     LIST: 'LIST'
 };
 
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 exports.default = Serializer;

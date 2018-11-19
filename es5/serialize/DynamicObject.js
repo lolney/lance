@@ -16,9 +16,15 @@ var _GameObject2 = require('./GameObject');
 
 var _GameObject3 = _interopRequireDefault(_GameObject2);
 
+<<<<<<< HEAD
 var _Serializer = require('./Serializer');
 
 var _Serializer2 = _interopRequireDefault(_Serializer);
+=======
+var _BaseTypes = require('./BaseTypes');
+
+var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
 var _MathUtils = require('../lib/MathUtils');
 
@@ -68,18 +74,31 @@ var DynamicObject = function (_GameObject) {
         * @example
         *     static get netScheme() {
         *       return Object.assign({
+<<<<<<< HEAD
         *           mojo: { type: Serializer.TYPES.UINT8 },
+=======
+        *           mojo: { type: BaseTypes.TYPES.UINT8 },
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         *         }, super.netScheme);
         *     }
         */
         get: function get() {
             return Object.assign({
+<<<<<<< HEAD
                 playerId: { type: _Serializer2.default.TYPES.INT16 },
                 position: { type: _Serializer2.default.TYPES.CLASSINSTANCE },
                 width: { type: _Serializer2.default.TYPES.INT16 },
                 height: { type: _Serializer2.default.TYPES.INT16 },
                 velocity: { type: _Serializer2.default.TYPES.CLASSINSTANCE },
                 angle: { type: _Serializer2.default.TYPES.FLOAT32 }
+=======
+                playerId: { type: _BaseTypes2.default.TYPES.INT16 },
+                position: { type: _BaseTypes2.default.TYPES.CLASSINSTANCE },
+                width: { type: _BaseTypes2.default.TYPES.INT16 },
+                height: { type: _BaseTypes2.default.TYPES.INT16 },
+                velocity: { type: _BaseTypes2.default.TYPES.CLASSINSTANCE },
+                angle: { type: _BaseTypes2.default.TYPES.FLOAT32 }
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             }, _get(DynamicObject.__proto__ || Object.getPrototypeOf(DynamicObject), 'netScheme', this));
         }
 
@@ -107,6 +126,10 @@ var DynamicObject = function (_GameObject) {
         var _this = _possibleConstructorReturn(this, (DynamicObject.__proto__ || Object.getPrototypeOf(DynamicObject)).call(this, gameEngine, options));
 
         _this.playerId = 0;
+<<<<<<< HEAD
+=======
+        _this.bendingIncrements = 0;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
         _this.position = new _TwoVector2.default(0, 0);
         _this.velocity = new _TwoVector2.default(0, 0);
@@ -154,37 +177,60 @@ var DynamicObject = function (_GameObject) {
         _this.angle = 90;
 
         /**
+<<<<<<< HEAD
+=======
+        * @deprecated since version 3.0.8
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         * should rotate left by {@link DynamicObject#rotationSpeed} on next step
         * @member {Boolean}
         */
         _this.isRotatingLeft = false;
 
         /**
+<<<<<<< HEAD
+=======
+        * @deprecated since version 3.0.8
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         * should rotate right by {@link DynamicObject#rotationSpeed} on next step
         * @member {Boolean}
         */
         _this.isRotatingRight = false;
 
         /**
+<<<<<<< HEAD
+=======
+        * @deprecated since version 3.0.8
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         * should accelerate by {@link DynamicObject#acceleration} on next step
         * @member {Boolean}
         */
         _this.isAccelerating = false;
 
         /**
+<<<<<<< HEAD
+=======
+        * @deprecated since version 3.0.8
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         * angle rotation per step
         * @member {Number}
         */
         _this.rotationSpeed = 2.5;
 
         /**
+<<<<<<< HEAD
+=======
+        * @deprecated since version 3.0.8
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         * acceleration per step
         * @member {Number}
         */
         _this.acceleration = 0.1;
 
+<<<<<<< HEAD
         _this.bending = new _TwoVector2.default(0, 0);
         _this.bendingAngle = 0;
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         _this.deceleration = 0.99;
         return _this;
     }
@@ -211,6 +257,67 @@ var DynamicObject = function (_GameObject) {
         }
 
         /**
+<<<<<<< HEAD
+=======
+         * Each object class can define its own bending overrides.
+         * return an object which can include attributes: position, velocity,
+         * and angle.  In each case, you can specify a min value, max
+         * value, and a percent value.
+         *
+         * @return {Object} bending - an object with bending paramters
+         */
+
+    }, {
+        key: 'turnRight',
+
+
+        /**
+        * turn object clock-wise
+        * @param {Number} deltaAngle - the angle to turn, in degrees
+        * @return {DynamicObject} return this object
+        */
+        value: function turnRight(deltaAngle) {
+            this.angle += deltaAngle;
+            if (this.angle >= 360) {
+                this.angle -= 360;
+            }
+            if (this.angle < 0) {
+                this.angle += 360;
+            }
+            return this;
+        }
+
+        /**
+        * turn object counter-clock-wise
+        * @param {Number} deltaAngle - the angle to turn, in degrees
+        * @return {DynamicObject} return this object
+        */
+
+    }, {
+        key: 'turnLeft',
+        value: function turnLeft(deltaAngle) {
+            return this.turnRight(-deltaAngle);
+        }
+
+        /**
+        * accelerate along the direction that the object is facing
+        * @param {Number} acceleration - the acceleration
+        * @return {DynamicObject} return this object
+        */
+
+    }, {
+        key: 'accelerate',
+        value: function accelerate(acceleration) {
+            var rad = this.angle * (Math.PI / 180);
+            var dv = new _TwoVector2.default(Math.cos(rad), Math.sin(rad));
+            dv.multiplyScalar(acceleration);
+            this.velocity.add(dv);
+
+            return this;
+        }
+
+        /**
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          * Formatted textual description of the game object's current bending properties.
          * @return {String} description - a string description
          */
@@ -218,7 +325,11 @@ var DynamicObject = function (_GameObject) {
     }, {
         key: 'bendingToString',
         value: function bendingToString() {
+<<<<<<< HEAD
             if (this.bendingIncrements) return 'bend=' + this.bending + ' angle=' + this.bendingAngle + ' num_increments=' + this.bendingIncrements;
+=======
+            if (this.bendingIncrements) return '\u0394Pos=' + this.bendingPositionDelta + ' \u0394Vel=' + this.bendingVelocityDelta + ' \u0394Angle=' + this.bendingAngleDelta + ' increments=' + this.bendingIncrements;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             return 'no bending';
         }
 
@@ -234,7 +345,10 @@ var DynamicObject = function (_GameObject) {
             _get(DynamicObject.prototype.__proto__ || Object.getPrototypeOf(DynamicObject.prototype), 'syncTo', this).call(this, other);
             this.position.copy(other.position);
             this.velocity.copy(other.velocity);
+<<<<<<< HEAD
             this.bending.copy(other.bending);
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             this.bendingAngle = other.bendingAngle;
             this.rotationSpeed = other.rotationSpeed;
             this.acceleration = other.acceleration;
@@ -242,6 +356,7 @@ var DynamicObject = function (_GameObject) {
         }
     }, {
         key: 'bendToCurrent',
+<<<<<<< HEAD
         value: function bendToCurrent(original, bending, worldSettings, isLocal, bendingIncrements) {
 
             // TODO: the bending parameters should now be an object,
@@ -336,6 +451,55 @@ var DynamicObject = function (_GameObject) {
 
             var shortestAngle = ((nextObj.angle - angle) % 360 + 540) % 360 - 180;
             this.angle = angle + shortestAngle * playPercentage;
+=======
+        value: function bendToCurrent(original, percent, worldSettings, isLocal, increments) {
+
+            var bending = { increments: increments, percent: percent };
+            // if the object has defined a bending multiples for this object, use them
+            var positionBending = Object.assign({}, bending, this.bending.position);
+            var velocityBending = Object.assign({}, bending, this.bending.velocity);
+            var angleBending = Object.assign({}, bending, this.bending.angle);
+
+            if (isLocal) {
+                Object.assign(positionBending, this.bending.positionLocal);
+                Object.assign(velocityBending, this.bending.velocityLocal);
+                Object.assign(angleBending, this.bending.angleLocal);
+            }
+
+            // get the incremental delta position & velocity
+            this.incrementScale = percent / increments;
+            this.bendingPositionDelta = original.position.getBendingDelta(this.position, positionBending);
+            this.bendingVelocityDelta = original.velocity.getBendingDelta(this.velocity, velocityBending);
+            this.bendingAngleDelta = _MathUtils2.default.interpolateDeltaWithWrapping(original.angle, this.angle, angleBending.percent, 0, 360) / increments;
+
+            this.bendingTarget = new this.constructor();
+            this.bendingTarget.syncTo(this);
+
+            // revert to original
+            this.position.copy(original.position);
+            this.velocity.copy(original.velocity);
+            this.angle = original.angle;
+
+            // keep parameters
+            this.bendingIncrements = increments;
+            this.bendingOptions = bending;
+        }
+    }, {
+        key: 'applyIncrementalBending',
+        value: function applyIncrementalBending(stepDesc) {
+            if (this.bendingIncrements === 0) return;
+
+            var timeFactor = 1;
+            if (stepDesc && stepDesc.dt) timeFactor = stepDesc.dt / (1000 / 60);
+
+            var posDelta = this.bendingPositionDelta.clone().multiplyScalar(timeFactor);
+            var velDelta = this.bendingVelocityDelta.clone().multiplyScalar(timeFactor);
+            this.position.add(posDelta);
+            this.velocity.add(velDelta);
+            this.angle += this.bendingAngleDelta * timeFactor;
+
+            this.bendingIncrements--;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
     }, {
         key: 'getAABB',
@@ -358,6 +522,19 @@ var DynamicObject = function (_GameObject) {
             return this.position.y;
         }
     }, {
+<<<<<<< HEAD
+=======
+        key: 'bending',
+        get: function get() {
+            return {
+                // example:
+                // position: { percent: 0.8, min: 0.0, max: 4.0 },
+                // velocity: { percent: 0.4, min: 0.0 },
+                // angleLocal: { percent: 0.0 }
+            };
+        }
+    }, {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         key: 'maxSpeed',
         get: function get() {
             return null;

@@ -185,7 +185,7 @@ class GameEngine {
         }
 
         // physics step
-        if (this.physicsEngine) {
+        if (this.physicsEngine && !this.ignorePhysics) {
             if (dt) dt /= 1000; // physics engines work in seconds
             this.physicsEngine.step(dt, objectFilter);
         }
@@ -311,6 +311,14 @@ class GameEngine {
     registerClasses(serializer) {
     }
 
+    /**
+     * Decide whether the player game is over by returning an Object, need to be implemented
+     *
+     * @return {Object} truthful if the game is over for the player and the object is returned as GameOver data
+     */
+    getPlayerGameOverResult() {
+        return null;
+    }
 }
 
 /**

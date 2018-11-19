@@ -53,7 +53,10 @@ var Scheduler = function () {
         this.once = eventEmitter.once;
         this.removeListener = eventEmitter.removeListener;
         this.emit = eventEmitter.emit;
+<<<<<<< HEAD
         this.stopped = false;
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }
 
     // in same cases, setTimeout is ignored by the browser,
@@ -77,9 +80,12 @@ var Scheduler = function () {
         value: function nextTick() {
             var stepStartTime = new Date().getTime();
             if (stepStartTime > this.nextExecTime + this.options.period * LOOP_SLOW_THRESH) {
+<<<<<<< HEAD
                 if (this.stopped) {
                     return;
                 }
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                 this.delayCounter++;
             } else this.delayCounter = 0;
 
@@ -110,11 +116,14 @@ var Scheduler = function () {
             if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && typeof window.requestAnimationFrame === 'function') window.requestAnimationFrame(this.nextTickChecker.bind(this));
             return this;
         }
+<<<<<<< HEAD
     }, {
         key: 'stop',
         value: function stop() {
             this.stopped = true;
         }
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
         /**
          * delay next execution

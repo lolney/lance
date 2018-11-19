@@ -4,8 +4,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+<<<<<<< HEAD
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _SyncStrategy2 = require('./SyncStrategy');
@@ -43,9 +46,18 @@ var ExtrapolateStrategy = function (_SyncStrategy) {
         _this.lastSync = null;
         _this.needFirstSync = true;
         _this.recentInputs = {};
+<<<<<<< HEAD
         _this.gameEngine = _this.clientEngine.gameEngine;
         _this.gameEngine.on('client__postStep', _this.extrapolate.bind(_this));
         _this.gameEngine.on('client__processInput', _this.clientInputSave.bind(_this));
+=======
+        _this.gameEngine.on('client__processInput', _this.clientInputSave.bind(_this));
+        _this.STEP_DRIFT_THRESHOLDS = {
+            onServerSync: { MAX_LEAD: 2, MAX_LAG: 3 }, // max step lead/lag allowed after every server sync
+            onEveryStep: { MAX_LEAD: 7, MAX_LAG: 4 }, // max step lead/lag allowed at every step
+            clientReset: 40 // if we are behind this many steps, just reset the step counter
+        };
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         return _this;
     }
 
@@ -63,6 +75,7 @@ var ExtrapolateStrategy = function (_SyncStrategy) {
             this.recentInputs[inputData.step].push(inputData);
         }
 
+<<<<<<< HEAD
         // add an object to our world
 
     }, {
@@ -79,6 +92,8 @@ var ExtrapolateStrategy = function (_SyncStrategy) {
             return curObj;
         }
 
+=======
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         // clean up the input buffer
 
     }, {
@@ -117,9 +132,20 @@ var ExtrapolateStrategy = function (_SyncStrategy) {
 
     }, {
         key: 'applySync',
+<<<<<<< HEAD
         value: function applySync(sync) {
             var _this2 = this;
 
+=======
+        value: function applySync(sync, required) {
+            var _this2 = this;
+
+            // if sync is in the future, we are not ready to apply yet.
+            if (!required && sync.stepCount > this.gameEngine.world.stepCount) {
+                return null;
+            }
+
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             this.gameEngine.trace.debug(function () {
                 return 'extrapolate applying sync';
             });
@@ -366,6 +392,7 @@ var ExtrapolateStrategy = function (_SyncStrategy) {
                     }
                 }
             }
+<<<<<<< HEAD
         }
 
         // Perform client-side extrapolation.
@@ -411,6 +438,10 @@ var ExtrapolateStrategy = function (_SyncStrategy) {
                 this.applySync(this.lastSync);
                 this.lastSync = null;
             }
+=======
+
+            return this.SYNC_APPLIED;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
         }
     }]);
 

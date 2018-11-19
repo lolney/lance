@@ -4,6 +4,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+<<<<<<< HEAD
+=======
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -15,8 +20,20 @@ var SyncStrategy = function () {
         this.clientEngine = clientEngine;
         this.gameEngine = clientEngine.gameEngine;
         this.options = Object.assign({}, inputOptions);
+<<<<<<< HEAD
         this.gameEngine.on('client__syncReceived', this.collectSync.bind(this));
         this.requiredSyncs = [];
+=======
+        this.gameEngine.on('client__postStep', this.syncStep.bind(this));
+        this.gameEngine.on('client__syncReceived', this.collectSync.bind(this));
+        this.requiredSyncs = [];
+        this.SYNC_APPLIED = 'SYNC_APPLIED';
+        this.STEP_DRIFT_THRESHOLDS = {
+            onServerSync: { MAX_LEAD: 1, MAX_LAG: 3 }, // max step lead/lag allowed after every server sync
+            onEveryStep: { MAX_LEAD: 7, MAX_LAG: 8 }, // max step lead/lag allowed at every step
+            clientReset: 20 // if we are behind this many steps, just reset the step counter
+        };
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }
 
     // collect a sync and its events
@@ -86,6 +103,70 @@ var SyncStrategy = function () {
                 return 'sync contains ' + objCount + ' objects ' + eventCount + ' events ' + stepCount + ' steps';
             });
         }
+<<<<<<< HEAD
+=======
+
+        // add an object to our world
+
+    }, {
+        key: 'addNewObject',
+        value: function addNewObject(objId, newObj, options) {
+
+            var curObj = new newObj.constructor(this.gameEngine, {
+                id: objId
+            });
+            curObj.syncTo(newObj);
+            this.gameEngine.addObjectToWorld(curObj);
+            if (this.clientEngine.options.verbose) console.log('adding new object ' + curObj);
+
+            return curObj;
+        }
+
+        // sync to step, by applying bending, and applying the latest sync
+
+    }, {
+        key: 'syncStep',
+        value: function syncStep(stepDesc) {
+            var _this = this;
+
+            // apply incremental bending
+            this.gameEngine.world.forEachObject(function (id, o) {
+                if (typeof o.applyIncrementalBending === 'function') {
+                    o.applyIncrementalBending(stepDesc);
+                    o.refreshToPhysics();
+                }
+            });
+
+            // apply all pending required syncs
+
+            var _loop = function _loop() {
+
+                var requiredStep = _this.requiredSyncs[0].stepCount;
+
+                // if we haven't reached the corresponding step, it's too soon to apply syncs
+                if (requiredStep > _this.gameEngine.world.stepCount) return {
+                        v: void 0
+                    };
+
+                _this.gameEngine.trace.trace(function () {
+                    return 'applying a required sync ' + requiredStep;
+                });
+                _this.applySync(_this.requiredSyncs.shift(), true);
+            };
+
+            while (this.requiredSyncs.length) {
+                var _ret = _loop();
+
+                if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+            }
+
+            // apply the sync and delete it on success
+            if (this.lastSync) {
+                var rc = this.applySync(this.lastSync, false);
+                if (rc === this.SYNC_APPLIED) this.lastSync = null;
+            }
+        }
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
     }]);
 
     return SyncStrategy;

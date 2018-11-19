@@ -1,19 +1,19 @@
 import Utils from './../lib/Utils';
-import Serializer from './Serializer';
+import BaseTypes from './BaseTypes';
 
 class Serializable {
     /**
      *  Class can be serialized using either:
-         - a class based netScheme
-         - an instance based netScheme
-         - completely dynamically (not implemented yet)
-
-     * @param {Object} serializer
+     * - a class based netScheme
+     * - an instance based netScheme
+     * - completely dynamically (not implemented yet)
+     *
+     * @param {Object} serializer - Serializer instance
      * @param {Object} [options] - Options object
      * @param {Object} options.dataBuffer [optional] - Data buffer to write to. If null a new data buffer will be created
      * @param {Number} options.bufferOffset [optional] - The buffer data offset to start writing at. Default: 0
      * @param {String} options.dry [optional] - Does not actually write to the buffer (useful to gather serializeable size)
-     * @returns {Object} the serialized object.  Contains attributes: dataBuffer - buffer which contains the serialized data;  bufferOffset - offset where the serialized data starts.
+     * @return {Object} the serialized object.  Contains attributes: dataBuffer - buffer which contains the serialized data;  bufferOffset - offset where the serialized data starts.
      */
     serialize(serializer, options) {
         options = Object.assign({
@@ -73,23 +73,23 @@ class Serializable {
                     serializer.writeDataView(dataView, this[property], bufferOffset + localBufferOffset, netScheme[property]);
                 }
 
-                if (netScheme[property].type === Serializer.TYPES.STRING) {
+                if (netScheme[property].type === BaseTypes.TYPES.STRING) {
                     // derive the size of the string
                     localBufferOffset += Uint16Array.BYTES_PER_ELEMENT;
                     if (this[property] !== null)
                         localBufferOffset += this[property].length * Uint16Array.BYTES_PER_ELEMENT;
-                } else if (netScheme[property].type == Serializer.TYPES.CLASSINSTANCE) {
+                } else if (netScheme[property].type == BaseTypes.TYPES.CLASSINSTANCE) {
                     // derive the size of the included class
                     let objectInstanceBufferOffset = this[property].serialize(serializer, { dry: true }).bufferOffset;
                     localBufferOffset += objectInstanceBufferOffset;
-                } else if (netScheme[property].type == Serializer.TYPES.LIST) {
+                } else if (netScheme[property].type == BaseTypes.TYPES.LIST) {
                     // derive the size of the list
                     // list starts with number of elements
                     localBufferOffset += Uint16Array.BYTES_PER_ELEMENT;
 
                     for (let item of this[property]) {
                         // todo inelegant, currently doesn't support list of lists
-                        if (netScheme[property].itemType == Serializer.TYPES.CLASSINSTANCE) {
+                        if (netScheme[property].itemType == BaseTypes.TYPES.CLASSINSTANCE) {
                             let listBufferOffset = item.serialize(serializer, { dry: true }).bufferOffset;
                             localBufferOffset += listBufferOffset;
                         } else {
@@ -117,7 +117,7 @@ class Serializable {
 
         // get list of string properties which changed
         let netScheme = this.constructor.netScheme;
-        let isString = p => netScheme[p].type === Serializer.TYPES.STRING;
+        let isString = p => netScheme[p].type === BaseTypes.TYPES.STRING;
         let hasChanged = p => prevObject[p] !== this[p];
         let changedStrings = Object.keys(netScheme).filter(isString).filter(hasChanged);
         if (changedStrings.length == 0) return this;
@@ -135,11 +135,11 @@ class Serializable {
         for (let p of Object.keys(netScheme)) {
 
             // ignore classes and lists
-            if (netScheme[p].type === Serializer.TYPES.LIST || netScheme[p].type === Serializer.TYPES.CLASSINSTANCE)
+            if (netScheme[p].type === BaseTypes.TYPES.LIST || netScheme[p].type === BaseTypes.TYPES.CLASSINSTANCE)
                 continue;
 
             // strings might be pruned
-            if (netScheme[p].type === Serializer.TYPES.STRING) {
+            if (netScheme[p].type === BaseTypes.TYPES.STRING) {
                 if (typeof other[p] === 'string') this[p] = other[p];
                 continue;
             }

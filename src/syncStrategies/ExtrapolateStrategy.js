@@ -20,9 +20,12 @@ export default class ExtrapolateStrategy extends SyncStrategy {
         this.lastSync = null;
         this.needFirstSync = true;
         this.recentInputs = {};
-        this.gameEngine = this.clientEngine.gameEngine;
-        this.gameEngine.on('client__postStep', this.extrapolate.bind(this));
         this.gameEngine.on('client__processInput', this.clientInputSave.bind(this));
+        this.STEP_DRIFT_THRESHOLDS = {
+            onServerSync: { MAX_LEAD: 2, MAX_LAG: 3 }, // max step lead/lag allowed after every server sync
+            onEveryStep: { MAX_LEAD: 7, MAX_LAG: 4 }, // max step lead/lag allowed at every step
+            clientReset: 40 // if we are behind this many steps, just reset the step counter
+        };
     }
 
     // keep a buffer of inputs so that we can replay them on extrapolation
@@ -33,19 +36,6 @@ export default class ExtrapolateStrategy extends SyncStrategy {
             this.recentInputs[inputData.step] = [];
         }
         this.recentInputs[inputData.step].push(inputData);
-    }
-
-    // add an object to our world
-    addNewObject(objId, newObj, options) {
-
-        let curObj = new newObj.constructor(this.gameEngine, {
-            id: objId
-        });
-        curObj.syncTo(newObj);
-        this.gameEngine.addObjectToWorld(curObj);
-        console.log(`adding new object ${curObj}`);
-
-        return curObj;
     }
 
     // clean up the input buffer
@@ -59,7 +49,12 @@ export default class ExtrapolateStrategy extends SyncStrategy {
     }
 
     // apply a new sync
-    applySync(sync) {
+    applySync(sync, required) {
+
+        // if sync is in the future, we are not ready to apply yet.
+        if (!required && sync.stepCount > this.gameEngine.world.stepCount) {
+            return null;
+        }
 
         this.gameEngine.trace.debug(() => 'extrapolate applying sync');
 
@@ -187,36 +182,8 @@ export default class ExtrapolateStrategy extends SyncStrategy {
                 if (e.eventName === 'objectDestroy') this.gameEngine.removeObjectFromWorld(objId);
             });
         }
+
+        return this.SYNC_APPLIED;
     }
 
-    // Perform client-side extrapolation.
-    extrapolate(stepDesc) {
-
-        // apply incremental bending
-        this.gameEngine.world.forEachObject((id, o) => {
-            if (typeof o.applyIncrementalBending === 'function') {
-                o.applyIncrementalBending(stepDesc);
-                o.refreshToPhysics();
-            }
-        });
-
-        // apply all pending required syncs
-        while (this.requiredSyncs.length) {
-
-            let requiredStep = this.requiredSyncs[0].stepCount;
-
-            // if we haven't reached the corresponding step, it's too soon to apply syncs
-            if (requiredStep > this.gameEngine.world.stepCount)
-                return;
-
-            this.gameEngine.trace.trace(() => `applying a required sync ${requiredStep}`);
-            this.applySync(this.requiredSyncs.shift());
-        }
-
-        // if there is a sync from the server, from the past or present, apply it now
-        if (this.lastSync && this.lastSync.stepCount <= this.gameEngine.world.stepCount) {
-            this.applySync(this.lastSync);
-            this.lastSync = null;
-        }
-    }
 }

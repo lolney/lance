@@ -10,9 +10,15 @@ var _Utils = require('./../lib/Utils');
 
 var _Utils2 = _interopRequireDefault(_Utils);
 
+<<<<<<< HEAD
 var _Serializer = require('./Serializer');
 
 var _Serializer2 = _interopRequireDefault(_Serializer);
+=======
+var _BaseTypes = require('./BaseTypes');
+
+var _BaseTypes2 = _interopRequireDefault(_BaseTypes);
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28,15 +34,27 @@ var Serializable = function () {
 
         /**
          *  Class can be serialized using either:
+<<<<<<< HEAD
              - a class based netScheme
              - an instance based netScheme
              - completely dynamically (not implemented yet)
           * @param {Object} serializer
+=======
+         * - a class based netScheme
+         * - an instance based netScheme
+         * - completely dynamically (not implemented yet)
+         *
+         * @param {Object} serializer - Serializer instance
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          * @param {Object} [options] - Options object
          * @param {Object} options.dataBuffer [optional] - Data buffer to write to. If null a new data buffer will be created
          * @param {Number} options.bufferOffset [optional] - The buffer data offset to start writing at. Default: 0
          * @param {String} options.dry [optional] - Does not actually write to the buffer (useful to gather serializeable size)
+<<<<<<< HEAD
          * @returns {Object} the serialized object.  Contains attributes: dataBuffer - buffer which contains the serialized data;  bufferOffset - offset where the serialized data starts.
+=======
+         * @return {Object} the serialized object.  Contains attributes: dataBuffer - buffer which contains the serialized data;  bufferOffset - offset where the serialized data starts.
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
          */
         value: function serialize(serializer, options) {
             options = Object.assign({
@@ -103,6 +121,7 @@ var Serializable = function () {
                             serializer.writeDataView(dataView, this[property], bufferOffset + localBufferOffset, netScheme[property]);
                         }
 
+<<<<<<< HEAD
                         if (netScheme[property].type === _Serializer2.default.TYPES.STRING) {
                             // derive the size of the string
                             localBufferOffset += Uint16Array.BYTES_PER_ELEMENT;
@@ -112,6 +131,17 @@ var Serializable = function () {
                             var objectInstanceBufferOffset = this[property].serialize(serializer, { dry: true }).bufferOffset;
                             localBufferOffset += objectInstanceBufferOffset;
                         } else if (netScheme[property].type == _Serializer2.default.TYPES.LIST) {
+=======
+                        if (netScheme[property].type === _BaseTypes2.default.TYPES.STRING) {
+                            // derive the size of the string
+                            localBufferOffset += Uint16Array.BYTES_PER_ELEMENT;
+                            if (this[property] !== null) localBufferOffset += this[property].length * Uint16Array.BYTES_PER_ELEMENT;
+                        } else if (netScheme[property].type == _BaseTypes2.default.TYPES.CLASSINSTANCE) {
+                            // derive the size of the included class
+                            var objectInstanceBufferOffset = this[property].serialize(serializer, { dry: true }).bufferOffset;
+                            localBufferOffset += objectInstanceBufferOffset;
+                        } else if (netScheme[property].type == _BaseTypes2.default.TYPES.LIST) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                             // derive the size of the list
                             // list starts with number of elements
                             localBufferOffset += Uint16Array.BYTES_PER_ELEMENT;
@@ -125,7 +155,11 @@ var Serializable = function () {
                                     var item = _step2.value;
 
                                     // todo inelegant, currently doesn't support list of lists
+<<<<<<< HEAD
                                     if (netScheme[property].itemType == _Serializer2.default.TYPES.CLASSINSTANCE) {
+=======
+                                    if (netScheme[property].itemType == _BaseTypes2.default.TYPES.CLASSINSTANCE) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                                         var listBufferOffset = item.serialize(serializer, { dry: true }).bufferOffset;
                                         localBufferOffset += listBufferOffset;
                                     } else {
@@ -185,7 +219,11 @@ var Serializable = function () {
             // get list of string properties which changed
             var netScheme = this.constructor.netScheme;
             var isString = function isString(p) {
+<<<<<<< HEAD
                 return netScheme[p].type === _Serializer2.default.TYPES.STRING;
+=======
+                return netScheme[p].type === _BaseTypes2.default.TYPES.STRING;
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
             };
             var hasChanged = function hasChanged(p) {
                 return prevObject[p] !== _this[p];
@@ -236,10 +274,17 @@ var Serializable = function () {
 
 
                     // ignore classes and lists
+<<<<<<< HEAD
                     if (netScheme[p].type === _Serializer2.default.TYPES.LIST || netScheme[p].type === _Serializer2.default.TYPES.CLASSINSTANCE) continue;
 
                     // strings might be pruned
                     if (netScheme[p].type === _Serializer2.default.TYPES.STRING) {
+=======
+                    if (netScheme[p].type === _BaseTypes2.default.TYPES.LIST || netScheme[p].type === _BaseTypes2.default.TYPES.CLASSINSTANCE) continue;
+
+                    // strings might be pruned
+                    if (netScheme[p].type === _BaseTypes2.default.TYPES.STRING) {
+>>>>>>> ad9ce43d51e5013d08df140beed6928ac4d2648a
                         if (typeof other[p] === 'string') this[p] = other[p];
                         continue;
                     }

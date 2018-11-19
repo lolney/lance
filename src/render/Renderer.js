@@ -43,6 +43,7 @@ class Renderer {
         if ((typeof window === 'undefined') || !document) {
             console.log('renderer invoked on server side.');
         }
+        this.gameEngine.emit('client__rendererReady');
         return Promise.resolve(); // eslint-disable-line new-cap
     }
 
@@ -57,11 +58,13 @@ class Renderer {
      * method must call the clientEngine's step method.
      *
      * @param {Number} t - current time (only required in render-schedule mode)
-     * @param {Number} dt - time elapsed since last draw (only required in render-schedule mode)
+     * @param {Number} dt - time elapsed since last draw
      */
     draw(t, dt) {
+        this.gameEngine.emit('client__draw');
+
         if (this.clientEngine.options.scheduler === 'render-schedule')
-            this.runClientStep(t, dt);
+            this.runClientStep(t);
     }
 
     /**
@@ -71,8 +74,9 @@ class Renderer {
      * @param {Number} t - current time
      * @param {Number} dt - time elapsed since last draw
      */
-    runClientStep(t, dt) {
+    runClientStep(t) {
         let p = this.clientEngine.options.stepPeriod;
+        let dt = 0;
 
         // reset step time if we passed a threshold
         if (this.doReset || t > this.clientEngine.lastStepTime + TIME_RESET_THRESHOLD) {
@@ -88,7 +92,7 @@ class Renderer {
             this.clientEngine.correction = 0;
         }
 
-        // if not ready for a real step yet, retun
+        // if not ready for a real step yet, return
         // this might happen after catch up above
         if (t < this.clientEngine.lastStepTime) {
             dt = t - this.clientEngine.lastStepTime + this.clientEngine.correction;
@@ -116,6 +120,11 @@ class Renderer {
      * @param {Object} obj - The object to be removed.
      */
     removeObject(obj) {}
+
+    /**
+     * Called when clientEngine has stopped, time to clean up
+     */
+    stop() {}
 }
 
 export default Renderer;
