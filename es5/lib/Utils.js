@@ -44,10 +44,12 @@ var Utils = function () {
         }
     }, {
         key: 'httpGetPromise',
-        value: function httpGetPromise(url) {
+        value: function httpGetPromise(url, method) {
+            if (!method) method = 'GET';
+
             return new Promise(function (resolve, reject) {
                 var req = new XMLHttpRequest();
-                req.open('GET', url, true);
+                req.open(method, url, true);
                 req.onload = function () {
                     if (req.status >= 200 && req.status < 400) resolve(JSON.parse(req.responseText));else reject();
                 };

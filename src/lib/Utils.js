@@ -27,10 +27,13 @@ export default class Utils {
         return true;
     }
 
-    static httpGetPromise(url) {
+    static httpGetPromise(url, method) {
+        if (!method)
+            method = 'GET';
+
         return new Promise((resolve, reject) => {
             let req = new XMLHttpRequest();
-            req.open('GET', url, true);
+            req.open(method, url, true);
             req.onload = () => {
                 if (req.status >= 200 && req.status < 400) resolve(JSON.parse(req.responseText));
                 else reject();

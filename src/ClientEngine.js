@@ -156,7 +156,10 @@ class ClientEngine {
 
         let matchmaker = Promise.resolve({ serverURL: this.options.serverURL, status: 'ok' });
         if (this.options.matchmaker)
-            matchmaker = Utils.httpGetPromise(this.options.matchmaker);
+            matchmaker = Utils.httpGetPromise(
+                this.options.matchmaker,
+                this.options.matchmakerMethod
+            );
 
         return matchmaker.then(connectSocket);
     }
