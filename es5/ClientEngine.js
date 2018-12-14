@@ -168,19 +168,19 @@ var ClientEngine = function () {
 
                     _this.networkMonitor.registerClient(_this);
 
-                    _this.socket.once('connect', function () {
+                    _this.socket.on('connect', function () {
                         if (_this.options.auth) {
                             _this.socket.emit('authentication', {
                                 username: _this.options.auth.username,
                                 password: _this.options.auth.password
                             });
-                            _this.socket.on('authenticated', function () {
-                                console.log("authentication complete");
-                                resolve();
-                            });
                         } else {
                             resolve();
                         }
+                    });
+
+                    _this.socket.once('authenticated', function () {
+                        resolve();
                     });
 
                     _this.socket.once('error', function (error) {

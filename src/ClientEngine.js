@@ -124,19 +124,19 @@ class ClientEngine {
 
                 this.networkMonitor.registerClient(this);
 
-                this.socket.once('connect', () => {
+                this.socket.on('connect', () => {
                     if (this.options.auth) {
                         this.socket.emit('authentication', {
                             username: this.options.auth.username,
                             password: this.options.auth.password
                         });
-                        this.socket.on('authenticated', function() {
-                            console.log("authentication complete");
-                            resolve();
-                        });
                     } else {
                         resolve();
                     }
+                });
+
+                this.socket.once('authenticated', function() {
+                    resolve();
                 });
 
                 this.socket.once('error', (error) => {
