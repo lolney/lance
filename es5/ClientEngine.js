@@ -170,10 +170,16 @@ var ClientEngine = function () {
 
                     _this.socket.on('connect', function () {
                         if (_this.options.auth) {
-                            _this.socket.emit('authentication', {
-                                username: _this.options.auth.username,
-                                password: _this.options.auth.password
-                            });
+                            var config = void 0;
+                            if (_this.options.auth.token) {
+                                config = { token: _this.options.auth.token };
+                            } else {
+                                config = {
+                                    username: _this.options.auth.username,
+                                    password: _this.options.auth.password
+                                };
+                            }
+                            _this.socket.emit('authentication', config);
                         } else {
                             resolve();
                         }
@@ -199,7 +205,10 @@ var ClientEngine = function () {
             };
 
             var matchmaker = Promise.resolve({ serverURL: this.options.serverURL, status: 'ok' });
-            if (this.options.matchmaker) matchmaker = _Utils2.default.httpGetPromise(this.options.matchmaker, this.options.matchmakerMethod);
+            if (this.options.matchmaker) {
+                var resolver = this.options.resolver ? this.options.resolver : _Utils2.default.httpGetPromise;
+                matchmaker = resolver(this.options.matchmaker, this.options.matchmakerMethod);
+            }
 
             return matchmaker.then(connectSocket);
         }

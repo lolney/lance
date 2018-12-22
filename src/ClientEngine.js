@@ -126,10 +126,16 @@ class ClientEngine {
 
                 this.socket.on('connect', () => {
                     if (this.options.auth) {
-                        this.socket.emit('authentication', {
-                            username: this.options.auth.username,
-                            password: this.options.auth.password
-                        });
+                        let config;
+                        if (this.options.auth.token) {
+                            config = { token: this.options.auth.token };
+                        } else {
+                            config = {
+                                username: this.options.auth.username,
+                                password: this.options.auth.password
+                            };
+                        }
+                        this.socket.emit('authentication', config);
                     } else {
                         resolve();
                     }
@@ -155,11 +161,13 @@ class ClientEngine {
         };
 
         let matchmaker = Promise.resolve({ serverURL: this.options.serverURL, status: 'ok' });
-        if (this.options.matchmaker)
-            matchmaker = Utils.httpGetPromise(
+        if (this.options.matchmaker) {
+            let resolver = this.options.resolver ? this.options.resolver : Utils.httpGetPromise;
+            matchmaker = resolver(
                 this.options.matchmaker,
                 this.options.matchmakerMethod
             );
+        }
 
         return matchmaker.then(connectSocket);
     }
