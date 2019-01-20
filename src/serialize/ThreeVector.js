@@ -15,6 +15,10 @@ class ThreeVector extends Serializable {
         };
     }
 
+    static get name() {
+        return 'ThreeVector';
+    }
+
     /**
     * Creates an instance of a ThreeVector.
     * @param {Number} x - first value

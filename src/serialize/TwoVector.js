@@ -14,6 +14,10 @@ class TwoVector extends Serializable {
         };
     }
 
+    static get name() {
+        return 'TwoVector';
+    }
+
     /**
     * Creates an instance of a TwoVector.
     * @param {Number} x - first value

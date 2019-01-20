@@ -38,6 +38,11 @@ var ThreeVector = function (_Serializable) {
                 z: { type: _BaseTypes2.default.TYPES.FLOAT32 }
             };
         }
+    }, {
+        key: 'name',
+        get: function get() {
+            return 'ThreeVector';
+        }
 
         /**
         * Creates an instance of a ThreeVector.

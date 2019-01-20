@@ -37,6 +37,11 @@ var TwoVector = function (_Serializable) {
                 y: { type: _BaseTypes2.default.TYPES.FLOAT32 }
             };
         }
+    }, {
+        key: 'name',
+        get: function get() {
+            return 'TwoVector';
+        }
 
         /**
         * Creates an instance of a TwoVector.

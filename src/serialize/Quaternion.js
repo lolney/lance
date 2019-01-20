@@ -20,6 +20,10 @@ class Quaternion extends Serializable {
         };
     }
 
+    static get name() {
+        return 'Quaternion';
+    }
+
     /**
     * Creates an instance of a Quaternion.
     * @param {Number} w - first value

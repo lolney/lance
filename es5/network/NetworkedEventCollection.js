@@ -38,6 +38,11 @@ var NetworkedEventCollection = function (_Serializable) {
                 }
             };
         }
+    }, {
+        key: 'name',
+        get: function get() {
+            return 'NetworkedEventCollection';
+        }
     }]);
 
     function NetworkedEventCollection(events) {

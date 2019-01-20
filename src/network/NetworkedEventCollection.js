@@ -15,6 +15,10 @@ export default class NetworkedEventCollection extends Serializable {
         };
     }
 
+    static get name() {
+        return 'NetworkedEventCollection';
+    }
+
     constructor(events) {
         super();
         this.events = events || [];
